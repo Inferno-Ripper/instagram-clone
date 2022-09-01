@@ -15,6 +15,16 @@ a {
 	box-sizing: border-box;
 }
 
+body {
+	overflow-x: hidden;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.icon {
+		@apply sm:text-2xl text-lg lg:text-3xl transition-all duration-[250]  cursor-pointer hover:scale-[1.15];
+	}
+}
