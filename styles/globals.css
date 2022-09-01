@@ -25,6 +25,6 @@ body {
 
 @layer components {
 	.icon {
-		@apply sm:text-2xl text-lg lg:text-3xl transition-all duration-[250]  cursor-pointer hover:scale-[1.15];
+		@apply text-3xl lg:text-3xl transition-all duration-[250]  cursor-pointer hover:scale-[1.15];
 	}
 }

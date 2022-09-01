@@ -17,20 +17,17 @@ const ThemeChanger: any = () => {
 	};
 
 	return (
-		<div>
-			<button
-				className='bg-black text-white dark:text-black dark:bg-white border-none'
-				onClick={toggleTheme}
-			>
+		<div onClick={toggleTheme} className='w-full'>
+			<button className='flex items-center w-full gap-4 border-none'>
 				{theme === 'dark' ? (
 					<>
+						<LightModeIcon />
 						<p>Light Mode</p>
-						<DarkModeIcon />
 					</>
 				) : (
 					<>
+						<DarkModeIcon />
 						<p>Dark Mode</p>
-						<LightModeIcon />
 					</>
 				)}
 			</button>

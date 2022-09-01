@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Feed from '../components/Feed';
 import Header from '../components/Header';
 
 const Home: NextPage = () => {
@@ -11,11 +12,9 @@ const Home: NextPage = () => {
 				<link rel='icon' href='instagram-logo-favicon.png' />
 			</Head>
 
-			{/* header */}
 			<Header />
 
-			{/* body */}
-			<div className='w-full h-full dark:bg-dark-dark bg-dark-white'></div>
+			<Feed />
 		</div>
 	);
 };
