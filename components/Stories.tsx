@@ -56,7 +56,7 @@ const Stories = () => {
 				})}
 			</div>
 			<div
-				className='sticky right-0 -rotate-90 cursor-pointer '
+				className='sticky right-0 z-40 -rotate-90 cursor-pointer '
 				onClick={() => scroll(200)}
 			>
 				<ExpandCircleDownIcon className='transition-all duration-200 opacity-70 hover:scale-125 hover:opacity-100' />

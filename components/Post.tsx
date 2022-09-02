@@ -52,7 +52,7 @@ const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
 			{/* image */}
 
 			<div className='flex items-center justify-center bg-black border-b border-gray-200 dark:border-dark-border'>
-				<img src={image} className='object-fill w-full h-96' alt='' />
+				<img src={image} className='object-fill w-full h-[350px]' alt='' />
 			</div>
 
 			{/* post buttons */}
@@ -78,7 +78,7 @@ const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
 					</p>
 				</div>
 
-				<p className='p-2 text-xs text-gray-400'>{postedAt}</p>
+				<p className='p-2 text-xs text-zinc-500'>{postedAt}</p>
 			</div>
 
 			{/* comment */}
