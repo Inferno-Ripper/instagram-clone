@@ -22,7 +22,9 @@ const SuggestionsProfile = ({ userName, avatar }: IUser) => {
 				<p className='text-[15px] font-bold'>{userName}</p>
 			</div>
 
-			<button className='text-[14px] font-bold text-light-blue'>Follow</button>
+			<button className='text-[14px] font-bold hover:text-blue-700 transition-all duration-300 text-light-blue'>
+				Follow
+			</button>
 		</div>
 	);
 };

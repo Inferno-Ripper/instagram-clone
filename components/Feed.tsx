@@ -4,6 +4,7 @@ import Posts from './Posts';
 import Stories from './Stories';
 import SuggestionsProfile from './SuggestionsProfile';
 import { faker } from '@faker-js/faker';
+import Link from 'next/link';
 
 interface IUser {
 	userId: string;
@@ -32,8 +33,6 @@ const Feed = () => {
 		};
 	};
 
-	console.log(usersSuggestions);
-
 	return (
 		<main className='flex gap-10 pt-8  justify-center min-h-[93vh] h-auto text-black dark:text-white bg-dark-white dark:bg-dark-dark '>
 			{/* stories and posts section */}
@@ -46,10 +45,14 @@ const Feed = () => {
 			<section className='flex-col hidden gap-6 mt-6 lg:flex w-80'>
 				<MiniProfile />
 
-				<div className='flex justify-between '>
+				<div className='flex items-center justify-between '>
 					<p className='font-bold text-zinc-500'>Suggestions For You</p>
 
-					<button className='text-[14px] font-bold '>See All</button>
+					<Link href='/suggested-users'>
+						<p className='hover:scale-110 pt-1 transition-all duration-300 text-[14px] font-bold cursor-pointer hover:underline underline-offset-4  '>
+							See All
+						</p>
+					</Link>
 				</div>
 
 				<div className='space-y-4'>

@@ -43,6 +43,7 @@ const Stories = () => {
 			ref={storiesScrollbar}
 			className='hide-scrollbar relative border rounded-lg h-32 p-1 scroll-smooth overflow-scroll whitespace-nowrap border-gray-200 flex  items-center bg-full-white w-[500px] dark:bg-dark-light dark:border-dark-border'
 		>
+			{/* left scroll button */}
 			<div
 				className='sticky left-0 z-40 rotate-90 cursor-pointer'
 				onClick={() => scroll(-200)}
@@ -50,11 +51,14 @@ const Stories = () => {
 				<ExpandCircleDownIcon className='transition-all duration-200 opacity-70 hover:scale-125 hover:opacity-100 ' />
 			</div>
 
+			{/* stories */}
 			<div className='flex items-center gap-2'>
 				{usersStories?.map(({ userId, userName, avatar }) => {
 					return <Story key={userId} userName={userName} avatar={avatar} />;
 				})}
 			</div>
+
+			{/* right scroll button */}
 			<div
 				className='sticky right-0 z-40 -rotate-90 cursor-pointer '
 				onClick={() => scroll(200)}

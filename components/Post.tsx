@@ -6,8 +6,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 interface IPost {
 	id: string;
 	userName: string;
@@ -83,14 +82,14 @@ const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
 
 			{/* comment */}
 			<div className='flex items-center gap-4 px-6 py-4'>
-				<SentimentSatisfiedAltOutlinedIcon className=' icon' />
+				<SentimentSatisfiedAltIcon className=' icon' />
 
 				<input
 					type='text'
 					value={newComment}
 					onChange={(e) => setNewComment(e.target.value)}
 					placeholder='Add A Comment...'
-					className='flex-1 bg-transparent border-none outline-none'
+					className='flex-1 text-lg bg-transparent border-none outline-none placeholder:text-sm focus:text-black dark:focus:text-white text-zinc-500'
 				/>
 
 				<button

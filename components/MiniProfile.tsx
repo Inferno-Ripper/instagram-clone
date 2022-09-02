@@ -20,7 +20,9 @@ const MiniProfile = () => {
 				</div>
 			</div>
 
-			<button className='text-[14px] font-bold text-light-blue'>Switch</button>
+			<button className='text-[14px] font-bold text-light-blue hover:text-blue-700 transition-all duration-300'>
+				Switch
+			</button>
 		</div>
 	);
 };
