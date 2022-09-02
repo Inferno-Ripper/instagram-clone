@@ -93,31 +93,34 @@ export default function AccountDropDownMenu() {
 				transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			>
-				<MenuItem className='flex items-center w-56 gap-4 dark:hover:bg-dark-dark'>
-					<AccountCircleOutlinedIcon /> Profile
+				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
+					<AccountCircleOutlinedIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+					Profile
 				</MenuItem>
 
-				<MenuItem className='flex items-center w-56 gap-4 dark:hover:bg-dark-dark'>
-					<BookmarkBorderOutlinedIcon /> Saved
+				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
+					<BookmarkBorderOutlinedIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+					Saved
 				</MenuItem>
 
-				<MenuItem className='flex items-center w-56 gap-4 dark:hover:bg-dark-dark'>
+				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
 					<SettingsIcon />
 					Settings
 				</MenuItem>
 
-				<MenuItem className='flex items-center w-56 gap-4 dark:hover:bg-dark-dark'>
-					<ChangeCircleIcon /> Switch Account
+				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
+					<ChangeCircleIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+					Switch Account
 				</MenuItem>
 
-				<MenuItem className='flex items-center gap-4 dark:hover:bg-dark-dark'>
+				<MenuItem className='flex items-center gap-4 group dark:hover:bg-dark-dark'>
 					<ThemeChanger />
 				</MenuItem>
 
 				<Divider />
 
-				<MenuItem className='flex items-center w-56 gap-4 dark:hover:bg-dark-dark'>
-					<Logout />
+				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
+					<Logout className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
 					Logout
 				</MenuItem>
 			</Menu>

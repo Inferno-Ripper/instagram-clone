@@ -41,7 +41,7 @@ const Stories = () => {
 	return (
 		<div
 			ref={storiesScrollbar}
-			className='hide-scrollbar relative border rounded-lg h-32 px-1 scroll-smooth overflow-scroll whitespace-nowrap border-gray-200 flex  items-center bg-full-white w-[500px] dark:bg-dark-light dark:border-dark-border'
+			className='hide-scrollbar relative border rounded-lg h-32 p-1 scroll-smooth overflow-scroll whitespace-nowrap border-gray-200 flex  items-center bg-full-white w-[500px] dark:bg-dark-light dark:border-dark-border'
 		>
 			<div
 				className='sticky left-0 z-40 rotate-90 cursor-pointer'
