@@ -10,6 +10,7 @@ interface IUser {
 	userId: string;
 	userName: string;
 	avatar: string;
+	followedBy: string;
 }
 
 const Feed = () => {
@@ -30,6 +31,7 @@ const Feed = () => {
 			userId: faker.datatype.uuid(),
 			userName: faker.internet.userName(),
 			avatar: faker.image.avatar(),
+			followedBy: `Followed By ${faker.name.fullName()}, ${faker.name.fullName()}`,
 		};
 	};
 
@@ -56,12 +58,13 @@ const Feed = () => {
 				</div>
 
 				<div className='space-y-4'>
-					{usersSuggestions?.map(({ userId, userName, avatar }) => {
+					{usersSuggestions?.map(({ userId, userName, avatar, followedBy }) => {
 						return (
 							<SuggestionsProfile
 								key={userId}
 								userName={userName}
 								avatar={avatar}
+								followedBy={followedBy}
 							/>
 						);
 					})}

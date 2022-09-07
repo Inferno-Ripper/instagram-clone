@@ -1,22 +1,34 @@
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Avatar } from '@mui/material';
 import Image from 'next/image';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { IUser, userRecoil } from '../atoms/userAtom';
 
-const MiniProfile = () => {
+const MiniProfile = (): any => {
+	const user = useRecoilValue<IUser>(userRecoil);
+
+	if (!user) return;
+
+	const { email, displayName, photo } = user;
+
 	return (
 		<div className='flex items-center justify-between '>
 			<div className='flex items-center gap-5'>
-				<Image
-					priority
-					src='https://cdn.pixabay.com/photo/2019/06/04/16/07/mountains-4251750_1280.jpg'
-					objectFit='fill'
-					height={'60px'}
-					width={'60px'}
-					alt='profile picture'
-					className='rounded-full'
-				/>
-				<div className=''>
-					<p className='font-medium '>user_name</p>
-					<p className='text-zinc-500 '>real name</p>
+				{photo ? (
+					<img
+						src={photo}
+						alt='profile picture'
+						className='rounded-full w-[50px] h-[50px]'
+					/>
+				) : (
+					<AccountCircle className='text-gray-500 rounded-full cursor-pointer w-14 h-14' />
+				)}
+				<div className='max-w-[190px] '>
+					<p className='font-medium '>{displayName}</p>
+					<p className='overflow-scroll text-sm text-zinc-500 hide-scrollbar'>
+						{email}
+					</p>
 				</div>
 			</div>
 

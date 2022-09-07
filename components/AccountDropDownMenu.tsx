@@ -13,9 +13,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import ThemeChanger from './ThemeChanger';
 import { useTheme } from 'next-themes';
+import { signOut } from 'firebase/auth';
+import { auth } from '../pages/firebase';
+import { useRecoilState } from 'recoil';
+import { userRecoil } from '../atoms/userAtom';
 
 export default function AccountDropDownMenu() {
 	const { theme, setTheme } = useTheme();
+	const [user, setUser] = useRecoilState(userRecoil);
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
@@ -119,7 +124,13 @@ export default function AccountDropDownMenu() {
 
 				<Divider />
 
-				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
+				<MenuItem
+					className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'
+					onClick={() => {
+						setUser(null);
+						signOut(auth);
+					}}
+				>
 					<Logout className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
 					Logout
 				</MenuItem>

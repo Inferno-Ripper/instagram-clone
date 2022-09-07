@@ -1,9 +1,33 @@
 import type { NextPage } from 'next';
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Feed from '../components/Feed';
 import Header from '../components/Header';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { IUser, userRecoil } from '../atoms/userAtom';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 
 const Home: NextPage = () => {
+	const [user, setUser] = useRecoilState(userRecoil);
+
+	const router = useRouter();
+
+	useEffect(() => {
+		onAuthStateChanged(auth, (user) => {
+			// The signed-in user info.
+			if (user) {
+				const { displayName, email, uid, photoURL: photo } = user;
+
+				setUser({ displayName, email, uid, photo });
+			} else if (!user) {
+				// redirects if there is no user
+				router.push('/signin');
+			}
+		});
+	}, []);
+
 	return (
 		<div>
 			<Head>

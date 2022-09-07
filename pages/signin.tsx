@@ -1,22 +1,42 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import AppleIcon from '@mui/icons-material/Apple';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { auth, provider } from './firebase';
 import {
 	createUserWithEmailAndPassword,
+	onAuthStateChanged,
 	signInWithEmailAndPassword,
 	signInWithPopup,
 	updateProfile,
 } from 'firebase/auth';
+import { useRecoilState } from 'recoil';
+import { IUser, userRecoil } from '../atoms/userAtom';
+import { useRouter } from 'next/router';
 
 const Signin = () => {
+	const [user, setUser] = useRecoilState(userRecoil);
 	const [loginMethod, setLoginMethod] = useState<string>('login');
 	const [displayname, setDisplayname] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [isError, setIsError] = useState<string>('');
+
+	const router = useRouter();
+
+	useEffect(() => {
+		onAuthStateChanged(auth, (user) => {
+			// The signed-in user info.
+			if (user) {
+				const { displayName, email, uid, photoURL: photo } = user;
+
+				setUser({ displayName, email, uid, photo });
+
+				router.push('/');
+			}
+		});
+	}, []);
 
 	const displayError = (error: string) => {
 		setIsError(error);
@@ -30,20 +50,17 @@ const Signin = () => {
 		signInWithPopup(auth, provider)
 			.then((result) => {
 				// The signed-in user info.
-				const user = result.user;
+				const { displayName, email, uid, photoURL: photo } = result.user;
 
-				console.log(user);
-				// ...
+				setUser({ displayName, email, uid, photo });
 			})
 			.catch((error) => {
 				// Handle Errors here.
 				const errorCode = error.code;
-				const errorMessage = error.message;
 
 				if (errorCode === 'auth/popup-closed-by-user') {
 					displayError('Please Try Again');
 				}
-				// ...
 			});
 	};
 
@@ -60,10 +77,21 @@ const Signin = () => {
 					if (auth?.currentUser) {
 						updateProfile(auth?.currentUser, { displayName: displayname });
 					}
+
+					// The signed-in user info.
+					const {
+						displayName,
+						email,
+						uid,
+						photoURL: photo,
+					} = userCredential.user;
+
+					if (user) {
+						setUser({ displayName, email, uid, photo });
+					}
 				})
 				.catch((error) => {
 					const errorCode = error.code;
-					const errorMessage = error.message;
 
 					if (errorCode === 'auth/invalid-email') {
 						displayError('Invalid Email Address');
@@ -72,19 +100,24 @@ const Signin = () => {
 					if (errorCode === 'auth/email-already-in-use') {
 						displayError('Email Address Already In Use ');
 					}
-
-					console.log(errorCode);
-					console.log(errorMessage);
 				});
 		} else if (loginMethod === 'login') {
 			signInWithEmailAndPassword(auth, email, password)
 				.then((userCredential) => {
-					const user = userCredential.user;
-					console.log(user);
+					// The signed-in user info.
+					const {
+						displayName,
+						email,
+						uid,
+						photoURL: photo,
+					} = userCredential.user;
+
+					if (user) {
+						setUser({ displayName, email, uid, photo });
+					}
 				})
 				.catch((error) => {
 					const errorCode = error.code;
-					const errorMessage = error.message;
 
 					if (
 						errorCode === 'auth/user-not-found' ||
@@ -95,9 +128,6 @@ const Signin = () => {
 					if (errorCode === 'auth/wrong-password') {
 						displayError('Wrong Password');
 					}
-
-					console.log(errorCode);
-					console.log(errorMessage);
 				});
 		}
 	};
@@ -195,7 +225,7 @@ const Signin = () => {
 					<p
 						className={`${
 							isError ? 'opacity-100' : 'opacity-0'
-						} p-2 -my-6 font-bold  text-white bg-red-400 flex items-center justify-center h-8 transition-all duration-300 rounded`}
+						} p-2 -my-6 font-bold  text-red-800 bg-red-300 flex items-center justify-center min-h-[40px] transition-all duration-300 rounded`}
 					>
 						{isError}
 					</p>
