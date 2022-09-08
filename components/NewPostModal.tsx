@@ -5,6 +5,17 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import {
+	addDoc,
+	collection,
+	doc,
+	serverTimestamp,
+	updateDoc,
+} from 'firebase/firestore';
+import { useRecoilValue } from 'recoil';
+import { IUser, userRecoil } from '../atoms/userAtom';
+import { db, ref, storage } from '../pages/firebase';
+import { getDownloadURL, uploadBytes, uploadString } from 'firebase/storage';
 
 const style = {
 	position: 'absolute' as 'absolute',
@@ -28,10 +39,12 @@ export default function NewPostModal() {
 		setPreviewImage('');
 		setCaption('');
 	};
-	const [selectedFile, setSelectedFile] = React.useState<File | null>();
+	const [selectedFile, setSelectedFile] = React.useState<any>();
 	const [showPostPreview, setShowPostPreview] = React.useState<boolean>(false);
+	const [loading, setLoading] = React.useState<boolean>(false);
 	const [previewImage, setPreviewImage] = React.useState<string>();
 	const [caption, setCaption] = React.useState<string>();
+	const user: IUser = useRecoilValue(userRecoil);
 
 	const selectFileRef = React.useRef<HTMLInputElement>(null);
 
@@ -49,6 +62,37 @@ export default function NewPostModal() {
 			// setPreviewImage('');
 		}
 	}, [selectedFile]);
+
+	const uploadPost = async () => {
+		// set loading to true
+		setLoading(true);
+
+		// upload post to firebase firestore
+		const postDocRef = await addDoc(collection(db, 'posts'), {
+			uid: user?.uid,
+			userName: user?.displayName,
+			profilePicture: user?.photo,
+			caption,
+			timestamp: serverTimestamp(),
+		});
+
+		// upload image to firebase storage
+		const imgRef = ref(storage, `posts/${postDocRef.id}/image`);
+
+		await uploadBytes(imgRef, selectedFile).then(async (snapshot) => {
+			// after the image is uploaded to firebase storage get the download url
+			const downloadURL = await getDownloadURL(snapshot.ref);
+
+			// and then updata the post and add the image to post
+			await updateDoc(doc(db, 'posts', postDocRef.id), {
+				image: downloadURL,
+			});
+		});
+
+		// close modal and set loading to false
+		handleClose();
+		setLoading(false);
+	};
 
 	return (
 		<div>
@@ -149,12 +193,19 @@ export default function NewPostModal() {
 						{selectedFile && (
 							<textarea
 								maxLength={70}
+								rows={5}
+								cols={80}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										setShowPostPreview(true);
+									}
+								}}
 								autoFocus
 								disabled={showPostPreview}
 								value={caption}
 								onChange={(e) => setCaption(e.currentTarget.value)}
 								placeholder='Write a caption...'
-								className='w-full h-20 p-2 text-2xl bg-transparent outline-none resize-none hide-scrollbar'
+								className='w-full h-20 p-2 overflow-scroll text-2xl bg-transparent outline-none resize-none hide-scrollbar'
 							></textarea>
 						)}
 
@@ -172,14 +223,19 @@ export default function NewPostModal() {
 										</div>
 
 										<button
-											onClick={() => {
-												if (selectFileRef?.current) {
-													selectFileRef?.current.click();
-												}
-											}}
-											className='px-8 py-1 font-medium text-white transition-all duration-300 bg-blue-500 rounded hover:bg-blue-600 '
+											onClick={uploadPost}
+											disabled={loading}
+											className='flex items-center gap-4 px-6 py-1 font-medium text-white transition-all duration-300 bg-blue-500 rounded disabled:bg-blue-600 hover:bg-blue-600 '
 										>
-											Upload
+											{loading ? 'uploading' : 'upload'}
+
+											{loading && (
+												<img
+													src='/uploading.svg'
+													className='w-3 h-3 text-white'
+													alt='uploading svg'
+												/>
+											)}
 										</button>
 									</div>
 								)}

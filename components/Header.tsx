@@ -10,10 +10,15 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Link from 'next/link';
 import NewPostModal from './NewPostModal';
+import ThemeChanger from './ThemeChanger';
+
+import { useRecoilValue } from 'recoil';
+import { userRecoil } from '../atoms/userAtom';
 
 const Header = () => {
 	const [followingAndFavoritesMenu, setFollowingAndFavoritesMenu] =
 		useState<boolean>(false);
+	const user = useRecoilValue(userRecoil);
 
 	return (
 		<div className='sticky top-0 z-50 flex items-center justify-around w-full p-1 py-3 border-b border-gray-200 shadow-sm sm:p-3 dark:border-dark-border dark:bg-dark-light lg:justify-center md:gap-5 lg:gap-28 bg-full-white'>
@@ -62,16 +67,21 @@ const Header = () => {
 					className='w-full bg-transparent border-none outline-none focus:text-black dark:focus:text-white text-zinc-400'
 				/>
 			</div>
-
 			<div className='relative flex items-center gap-4 sm:gap-6'>
-				<HomeRoundedIcon className='text-3xl icon' />
-				<SendOutlinedIcon className='mb-1 text-2xl -rotate-45 icon' />
-				<NewPostModal />
-				<ExploreOutlinedIcon className='icon' />
-				<FavoriteBorderOutlinedIcon className='icon' />
+				{user ? (
+					<>
+						<HomeRoundedIcon className='text-3xl icon' />
+						<SendOutlinedIcon className='mb-1 text-2xl -rotate-45 icon' />
+						<NewPostModal />
+						<ExploreOutlinedIcon className='icon' />
+						<FavoriteBorderOutlinedIcon className='icon' />
 
-				{/* account drop down menu */}
-				<AccountDropDownMenu />
+						{/* account drop down menu */}
+						<AccountDropDownMenu />
+					</>
+				) : (
+					<ThemeChanger />
+				)}
 			</div>
 		</div>
 	);

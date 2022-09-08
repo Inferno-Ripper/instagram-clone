@@ -7,16 +7,24 @@ import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineR
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import moment from 'moment';
 interface IPost {
-	id: string;
+	uid: string;
 	userName: string;
-	userImage: string;
+	profilePicture: string;
 	image: string;
 	caption: string;
-	postedAt: string;
+	postedAt: any;
 }
 
-const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
+const Post = ({
+	uid,
+	image,
+	profilePicture,
+	userName,
+	caption,
+	postedAt,
+}: IPost) => {
 	const [newComment, setNewComment] = useState<string>();
 	const [isPostBtnDisabled, setIsPostBtnDisabled] = useState<boolean>(true);
 
@@ -32,14 +40,12 @@ const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
 		<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
 			{/* user info */}
 			<div className='flex items-center justify-between p-2 border-b border-gray-200 dark:border-dark-border'>
-				<div className='flex gap-1 cursor-pointer'>
-					{/* <Image
-					className='rounded-full '
-					src={}
-					width={'50px'}
-					height={'50px'}
-				/> */}
-					<AccountCircleIcon className='w-12 h-12 text-gray-500 ' />
+				<div className='flex gap-2 cursor-pointer'>
+					{profilePicture ? (
+						<img className='w-10 h-10 mr-1 rounded-full' src={profilePicture} />
+					) : (
+						<AccountCircleIcon className='w-12 h-12 text-gray-500 ' />
+					)}
 					<p className='pt-2 font-medium tracking-wide justify-self-start'>
 						{userName}
 					</p>
@@ -49,9 +55,8 @@ const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
 			</div>
 
 			{/* image */}
-
 			<div className='flex items-center justify-center bg-black border-b border-gray-200 dark:border-dark-border'>
-				<img src={image} className='object-fill w-full h-[350px]' alt='' />
+				<img src={image} className='object-contain w-full h-[350px]' alt='' />
 			</div>
 
 			{/* post buttons */}
@@ -77,7 +82,9 @@ const Post = ({ id, userName, userImage, image, caption, postedAt }: IPost) => {
 					</p>
 				</div>
 
-				<p className='p-2 text-xs text-zinc-500'>{postedAt}</p>
+				<p className='p-2 text-sm text-zinc-500'>
+					{moment(postedAt?.toDate()).fromNow()}
+				</p>
 			</div>
 
 			{/* comment */}

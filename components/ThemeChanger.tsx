@@ -2,10 +2,13 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import { userRecoil } from '../atoms/userAtom';
+import { useRecoilValue } from 'recoil';
 
 const ThemeChanger: any = () => {
 	const [mounted, setMounted] = useState(false);
 	const { theme, setTheme } = useTheme();
+	const user = useRecoilValue(userRecoil);
 
 	// When mounted on client, now we can show the UI
 	useEffect(() => setMounted(true), []);
@@ -22,12 +25,12 @@ const ThemeChanger: any = () => {
 				{theme === 'dark' ? (
 					<>
 						<LightModeIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-						<p>Light Mode</p>
+						{user && <p>Light Mode</p>}
 					</>
 				) : (
 					<>
 						<DarkModeIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-						<p>Dark Mode</p>
+						{user && <p>Dark Mode</p>}
 					</>
 				)}
 			</button>
