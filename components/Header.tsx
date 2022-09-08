@@ -3,13 +3,13 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import ExploreOutlinedIcon from '@mui/icons-material/ExploreOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import AccountDropDownMenu from './AccountDropDownMenu';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Link from 'next/link';
+import NewPostModal from './NewPostModal';
 
 const Header = () => {
 	const [followingAndFavoritesMenu, setFollowingAndFavoritesMenu] =
@@ -66,7 +66,7 @@ const Header = () => {
 			<div className='relative flex items-center gap-4 sm:gap-6'>
 				<HomeRoundedIcon className='text-3xl icon' />
 				<SendOutlinedIcon className='mb-1 text-2xl -rotate-45 icon' />
-				<AddBoxOutlinedIcon className='icon' />
+				<NewPostModal />
 				<ExploreOutlinedIcon className='icon' />
 				<FavoriteBorderOutlinedIcon className='icon' />
 

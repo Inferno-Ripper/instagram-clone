@@ -36,7 +36,7 @@ body {
 
 @layer components {
 	.icon {
-		@apply text-gray-800 dark:text-white hover:text-black text-3xl lg:text-3xl transition-all duration-[250]  cursor-pointer hover:scale-[1.15];
+		@apply text-gray-800 dark:text-white hover:text-black text-3xl lg:text-3xl transition-all duration-300  cursor-pointer hover:scale-[1.15];
 	}
 
 	.suggested-users-page-link {
