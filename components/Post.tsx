@@ -8,8 +8,18 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import moment from 'moment';
+import {
+	addDoc,
+	collection,
+	onSnapshot,
+	orderBy,
+	query,
+	serverTimestamp,
+} from 'firebase/firestore';
+import { db } from '../pages/firebase';
 interface IPost {
 	uid: string;
+	postId: string;
 	userName: string;
 	profilePicture: string;
 	image: string;
@@ -19,14 +29,28 @@ interface IPost {
 
 const Post = ({
 	uid,
+	postId,
 	image,
 	profilePicture,
 	userName,
 	caption,
 	postedAt,
 }: IPost) => {
+	const [comments, setComments] = useState<any>([]);
 	const [newComment, setNewComment] = useState<string>();
 	const [isPostBtnDisabled, setIsPostBtnDisabled] = useState<boolean>(true);
+
+	useEffect(() => {
+		onSnapshot(
+			query(
+				collection(db, 'posts', postId, 'comments'),
+				orderBy('timestamp', 'desc')
+			),
+			(snapshot) => {
+				setComments(snapshot.docs);
+			}
+		);
+	}, []);
 
 	useEffect(() => {
 		if (newComment) {
@@ -35,6 +59,24 @@ const Post = ({
 			setIsPostBtnDisabled(true);
 		}
 	}, [newComment]);
+
+	console.log(comments);
+
+	// add new comment
+	const addComment = async (e: any) => {
+		e.preventDefault();
+
+		const commentToSend = newComment;
+
+		setNewComment('');
+
+		await addDoc(collection(db, 'posts', postId, 'comments'), {
+			userName,
+			profilePicture,
+			comment: commentToSend,
+			timestamp: serverTimestamp(),
+		});
+	};
 
 	return (
 		<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
@@ -82,16 +124,36 @@ const Post = ({
 					</p>
 				</div>
 
+				{comments.length > 2 && (
+					<p className='p-2 pb-3 transition-all duration-300 cursor-pointer hover:text-white text-zinc-400'>
+						View all {comments.length} comments
+					</p>
+				)}
+
+				{/* comments */}
+				{comments.slice(0, 2).map((comment: any) => (
+					<div className='flex items-center justify-between px-2 py-1'>
+						<div className='flex items-center gap-2'>
+							<p className='font-bold'>{comment.data().userName}</p>
+
+							<p>{comment.data().comment}</p>
+						</div>
+
+						<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
+					</div>
+				))}
+
 				<p className='p-2 text-sm text-zinc-500'>
 					{moment(postedAt?.toDate()).fromNow()}
 				</p>
 			</div>
 
-			{/* comment */}
-			<div className='flex items-center gap-4 px-6 py-4'>
+			{/* add new comment */}
+			<form className='flex items-center gap-4 px-6 py-4' onSubmit={addComment}>
 				<SentimentSatisfiedAltIcon className=' icon' />
 
 				<input
+					maxLength={40}
 					type='text'
 					value={newComment}
 					onChange={(e) => setNewComment(e.target.value)}
@@ -100,12 +162,13 @@ const Post = ({
 				/>
 
 				<button
+					type='submit'
 					disabled={isPostBtnDisabled}
 					className='font-bold disabled:text-cyan- disabled:opacity-30 text-light-blue'
 				>
 					Post
 				</button>
-			</div>
+			</form>
 		</div>
 	);
 };

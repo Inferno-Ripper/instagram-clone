@@ -21,6 +21,7 @@ const Posts = () => {
 				return (
 					<Post
 						key={post.id}
+						postId={post.id}
 						uid={post.data().uid}
 						userName={post.data().userName}
 						profilePicture={post.data().profilePicture}
