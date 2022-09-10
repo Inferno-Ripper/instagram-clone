@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PostSettings from './PostSettings';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -6,14 +6,19 @@ import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineR
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import moment from 'moment';
+
 import {
 	addDoc,
 	collection,
+	deleteDoc,
+	doc,
 	onSnapshot,
 	orderBy,
 	query,
 	serverTimestamp,
+	setDoc,
 } from 'firebase/firestore';
 import { db } from '../pages/firebase';
 import PostModal from './PostModal';
@@ -40,6 +45,8 @@ const Post = ({
 }: IPost) => {
 	const [comments, setComments] = useState<any>([]);
 	const [newComment, setNewComment] = useState<string>();
+	const [likes, setLikes] = useState<any>([]);
+	const [isLiked, setIsLiked] = useState<boolean>(true);
 	const [isPostBtnDisabled, setIsPostBtnDisabled] = useState<boolean>(true);
 	const user = useRecoilValue<IUser>(userRecoil);
 
@@ -48,6 +55,9 @@ const Post = ({
 	const openModal = () => setIsPostModal(true);
 	const closeModal = () => setIsPostModal(false);
 
+	const commentRef = useRef<HTMLInputElement>(null);
+
+	// fetch comments from firestore
 	useEffect(() => {
 		onSnapshot(
 			query(
@@ -58,6 +68,13 @@ const Post = ({
 				setComments(snapshot.docs);
 			}
 		);
+	}, []);
+
+	// fetch likes from firestore
+	useEffect(() => {
+		onSnapshot(query(collection(db, 'posts', postId, 'likes')), (snapshot) => {
+			setLikes(snapshot.docs);
+		});
 	}, []);
 
 	useEffect(() => {
@@ -84,6 +101,31 @@ const Post = ({
 		});
 	};
 
+	useEffect(() => {
+		// check if the has liked the post
+		const isLikedPost = likes.filter((like: any) => like?.id === user?.uid);
+
+		// if the user has liked the post then set the like button to filled
+		if (isLikedPost[0]?.id === user?.uid) {
+			setIsLiked(true);
+		}
+		// else set the like button to unfilled
+		else if (isLikedPost[0]?.id !== user?.uid) {
+			setIsLiked(false);
+		}
+	}, [likes]);
+
+	// like a post
+	const likePost = async () => {
+		if (isLiked) {
+			await deleteDoc(doc(db, 'posts', postId, 'likes', user.uid));
+		} else if (!isLiked) {
+			await setDoc(doc(db, 'posts', postId, 'likes', user.uid), {
+				userName: user.displayName,
+			});
+		}
+	};
+
 	return (
 		<>
 			<PostModal
@@ -100,6 +142,9 @@ const Post = ({
 				newComment={newComment}
 				isPostBtnDisabled={isPostBtnDisabled}
 				setNewComment={setNewComment}
+				likes={likes}
+				likePost={likePost}
+				isLiked={isLiked}
 			/>
 
 			<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
@@ -133,13 +178,30 @@ const Post = ({
 				{/* post buttons */}
 				<div className='flex items-center justify-between px-2 py-3'>
 					<div className='flex items-center gap-5'>
-						<FavoriteBorderIcon className='icon' />
-						<ChatBubbleOutlineRoundedIcon className='icon' />
+						{isLiked ? (
+							<FavoriteIcon
+								className='text-red-500 dark:text-red-500 icon'
+								onClick={likePost}
+							/>
+						) : (
+							<FavoriteBorderIcon className='icon' onClick={likePost} />
+						)}
+						<ChatBubbleOutlineRoundedIcon
+							onClick={() => commentRef?.current?.focus()}
+							className='icon'
+						/>
 						<SendOutlinedIcon className='mb-2 text-2xl -rotate-45 icon' />
 					</div>
 
 					<BookmarkBorderIcon className='icon ' />
 				</div>
+
+				{likes.length > 0 && (
+					<p className='flex gap-2 px-2 pb-1 -my-1 font-bold'>
+						{likes?.length}
+						<span>{likes?.length === 1 ? 'like' : 'likes'}</span>
+					</p>
+				)}
 
 				{/* post info */}
 				<div className='border-b border-gray-200 dark:border-dark-border'>
@@ -164,7 +226,10 @@ const Post = ({
 
 					{/* comments */}
 					{comments.slice(0, 2).map((comment: any) => (
-						<div className='flex items-center justify-between px-2 py-1'>
+						<div
+							className='flex items-center justify-between px-2 py-1'
+							key={comment.id}
+						>
 							<div className='flex items-center gap-2'>
 								<p className='font-bold'>{comment.data().userName}</p>
 
@@ -191,6 +256,7 @@ const Post = ({
 						maxLength={40}
 						type='text'
 						value={newComment}
+						ref={commentRef}
 						onChange={(e) => setNewComment(e.target.value)}
 						placeholder='Add A Comment...'
 						className='flex-1 text-lg bg-transparent border-none outline-none placeholder:text-sm focus:text-black dark:focus:text-white text-zinc-500'

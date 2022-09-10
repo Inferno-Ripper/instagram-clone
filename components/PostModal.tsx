@@ -11,6 +11,7 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import moment from 'moment';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const style = {
 	position: 'absolute' as 'absolute',
@@ -37,7 +38,12 @@ export default function PostModal({
 	newComment,
 	isPostBtnDisabled,
 	setNewComment,
+	likes,
+	likePost,
+	isLiked,
 }: any) {
+	const commentRef = React.useRef<HTMLInputElement>(null);
+
 	return (
 		<div>
 			{/* <Button onClick={handleOpen}>Open modal</Button> */}
@@ -55,7 +61,7 @@ export default function PostModal({
 				<Fade in={isPostModal}>
 					<Box
 						sx={style}
-						className='p-0 flex flex-col lg:flex-row w-[80vw] h-[820px] items-center border-none outline-none  dark:bg-dark-light bg-full-white rounded-lg'
+						className='p-0 flex flex-col lg:flex-row w-[80vw] h-[720px] items-center border-none outline-none  dark:bg-dark-light bg-full-white rounded-lg'
 					>
 						{/* post image large screen size*/}
 						<div className='items-center justify-center hidden w-full h-full bg-black rounded-tl-lg rounded-bl-lg lg:flex '>
@@ -96,8 +102,18 @@ export default function PostModal({
 						{/* post buttons small screen size*/}
 						<div className='flex items-center justify-between w-full px-2 py-3 lg:hidden'>
 							<div className='flex items-center gap-5'>
-								<FavoriteBorderIcon className='icon' />
-								<ChatBubbleOutlineRoundedIcon className='icon' />
+								{isLiked ? (
+									<FavoriteIcon
+										className='text-red-500 dark:text-red-500 icon'
+										onClick={likePost}
+									/>
+								) : (
+									<FavoriteBorderIcon className='icon' onClick={likePost} />
+								)}
+								<ChatBubbleOutlineRoundedIcon
+									onClick={() => commentRef?.current?.focus()}
+									className='icon'
+								/>
 								<SendOutlinedIcon className='mb-2 text-2xl -rotate-45 icon' />
 							</div>
 
@@ -105,9 +121,12 @@ export default function PostModal({
 						</div>
 
 						{/* post likes small screen size*/}
-						<p className='w-full px-2 text-sm font-bold lg:hidden'>
-							95835 Likes
-						</p>
+						{likes.length > 0 && (
+							<p className='flex w-full gap-2 px-2 pb-1 -my-1 font-bold lg:hidden '>
+								{likes?.length}
+								<span>{likes?.length === 1 ? 'like' : 'likes'}</span>
+							</p>
+						)}
 
 						{/* post info small screen size*/}
 						<div className='w-full border-b border-gray-200 lg:hidden dark:border-dark-border'>
@@ -161,9 +180,11 @@ export default function PostModal({
 											{caption}
 										</p>
 									</div>
-
 									{comments.map((comment: any) => (
-										<div className='flex items-center justify-between px-2 py-2 break-words'>
+										<div
+											key={comment.id}
+											className='flex items-center justify-between px-2 py-2 break-words'
+										>
 											<div className='flex items-center gap-2 '>
 												{comment.data().profilePicture ? (
 													<img
@@ -192,8 +213,18 @@ export default function PostModal({
 								{/* post buttons */}
 								<div className='items-center justify-between hidden px-2 py-3 border-t border-gray-200 lg:flex dark:border-dark-border '>
 									<div className='flex items-center gap-5'>
-										<FavoriteBorderIcon className='icon' />
-										<ChatBubbleOutlineRoundedIcon className='icon' />
+										{isLiked ? (
+											<FavoriteIcon
+												className='text-red-500 dark:text-red-500 icon'
+												onClick={likePost}
+											/>
+										) : (
+											<FavoriteBorderIcon className='icon' onClick={likePost} />
+										)}
+										<ChatBubbleOutlineRoundedIcon
+											onClick={() => commentRef?.current?.focus()}
+											className='icon'
+										/>
 										<SendOutlinedIcon className='mb-2 text-2xl -rotate-45 icon' />
 									</div>
 
@@ -201,7 +232,13 @@ export default function PostModal({
 								</div>
 
 								<div className='hidden px-2 lg:block'>
-									<p className='text-sm font-bold '>95835 Likes</p>
+									{/* post likes small screen size*/}
+									{likes.length > 0 && (
+										<p className='hidden w-full gap-2 px-2 pb-1 -my-1 font-bold lg:flex '>
+											{likes?.length}
+											<span>{likes?.length === 1 ? 'like' : 'likes'}</span>
+										</p>
+									)}
 									<p className='py-2 text-sm text-zinc-400'>
 										{moment(postedAt?.toDate()).fromNow()}
 									</p>
@@ -217,6 +254,7 @@ export default function PostModal({
 									<input
 										maxLength={40}
 										type='text'
+										ref={commentRef}
 										value={newComment}
 										onChange={(e) => setNewComment(e.target.value)}
 										placeholder='Add A Comment...'
