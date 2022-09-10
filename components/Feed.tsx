@@ -36,9 +36,9 @@ const Feed = () => {
 	};
 
 	return (
-		<main className='flex gap-10 pt-8  justify-center min-h-[93vh] h-auto text-black dark:text-white bg-dark-white dark:bg-dark-dark '>
+		<main className='flex gap-10 pt-6  justify-center min-h-[93vh] h-auto text-black dark:text-white bg-dark-white dark:bg-dark-dark '>
 			{/* stories and posts section */}
-			<section className='flex flex-col gap-6'>
+			<section className='flex flex-col gap-2'>
 				<Stories />
 				<Posts />
 			</section>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Image from 'next/image';
 import PostSettings from './PostSettings';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
@@ -17,6 +16,9 @@ import {
 	serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../pages/firebase';
+import PostModal from './PostModal';
+import { IUser, userRecoil } from '../atoms/userAtom';
+import { useRecoilValue } from 'recoil';
 interface IPost {
 	uid: string;
 	postId: string;
@@ -39,6 +41,12 @@ const Post = ({
 	const [comments, setComments] = useState<any>([]);
 	const [newComment, setNewComment] = useState<string>();
 	const [isPostBtnDisabled, setIsPostBtnDisabled] = useState<boolean>(true);
+	const user = useRecoilValue<IUser>(userRecoil);
+
+	// post modal
+	const [isPostModal, setIsPostModal] = useState(false);
+	const openModal = () => setIsPostModal(true);
+	const closeModal = () => setIsPostModal(false);
 
 	useEffect(() => {
 		onSnapshot(
@@ -60,8 +68,6 @@ const Post = ({
 		}
 	}, [newComment]);
 
-	console.log(comments);
-
 	// add new comment
 	const addComment = async (e: any) => {
 		e.preventDefault();
@@ -71,105 +77,135 @@ const Post = ({
 		setNewComment('');
 
 		await addDoc(collection(db, 'posts', postId, 'comments'), {
-			userName,
-			profilePicture,
+			userName: user.displayName,
+			profilePicture: user.photo,
 			comment: commentToSend,
 			timestamp: serverTimestamp(),
 		});
 	};
 
 	return (
-		<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
-			{/* user info */}
-			<div className='flex items-center justify-between p-2 border-b border-gray-200 dark:border-dark-border'>
-				<div className='flex gap-2 cursor-pointer'>
-					{profilePicture ? (
-						<img className='w-10 h-10 mr-1 rounded-full' src={profilePicture} />
-					) : (
-						<AccountCircleIcon className='w-12 h-12 text-gray-500 ' />
-					)}
-					<p className='pt-2 font-medium tracking-wide justify-self-start'>
-						{userName}
-					</p>
-				</div>
+		<>
+			<PostModal
+				isPostModal={isPostModal}
+				setIsPostModal={setIsPostModal}
+				closeModal={closeModal}
+				profilePicture={profilePicture}
+				userName={userName}
+				caption={caption}
+				image={image}
+				postedAt={postedAt}
+				comments={comments}
+				addComment={addComment}
+				newComment={newComment}
+				isPostBtnDisabled={isPostBtnDisabled}
+				setNewComment={setNewComment}
+			/>
 
-				<PostSettings />
-			</div>
-
-			{/* image */}
-			<div className='flex items-center justify-center bg-black border-b border-gray-200 dark:border-dark-border'>
-				<img src={image} className='object-contain w-full h-[350px]' alt='' />
-			</div>
-
-			{/* post buttons */}
-			<div className='flex items-center justify-between px-2 py-3'>
-				<div className='flex items-center gap-5'>
-					<FavoriteBorderIcon className='icon' />
-					<ChatBubbleOutlineRoundedIcon className='icon' />
-					<SendOutlinedIcon className='mb-2 text-2xl -rotate-45 icon' />
-				</div>
-
-				<BookmarkBorderIcon className='icon ' />
-			</div>
-
-			{/* post info */}
-			<div className='border-b border-gray-200 dark:border-dark-border'>
-				<div className='flex items-start gap-2 p-2'>
-					<p className='font-bold tracking-wide justify-self-start'>
-						{userName}
-					</p>
-
-					<p className='overflow-scroll hide-scrollbar max-h-[70px] '>
-						{caption}
-					</p>
-				</div>
-
-				{comments.length > 2 && (
-					<p className='p-2 pb-3 transition-all duration-300 cursor-pointer hover:text-white text-zinc-400'>
-						View all {comments.length} comments
-					</p>
-				)}
-
-				{/* comments */}
-				{comments.slice(0, 2).map((comment: any) => (
-					<div className='flex items-center justify-between px-2 py-1'>
-						<div className='flex items-center gap-2'>
-							<p className='font-bold'>{comment.data().userName}</p>
-
-							<p>{comment.data().comment}</p>
-						</div>
-
-						<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
+			<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
+				{/* user info */}
+				<div className='flex items-center justify-between p-2 border-b border-gray-200 dark:border-dark-border'>
+					<div className='flex gap-2 cursor-pointer'>
+						{profilePicture ? (
+							<img
+								className='w-10 h-10 mr-1 rounded-full'
+								src={profilePicture}
+							/>
+						) : (
+							<AccountCircleIcon className='w-12 h-12 text-gray-500 ' />
+						)}
+						<p className='pt-2 font-medium tracking-wide justify-self-start'>
+							{userName}
+						</p>
 					</div>
-				))}
 
-				<p className='p-2 text-sm text-zinc-500'>
-					{moment(postedAt?.toDate()).fromNow()}
-				</p>
-			</div>
+					<PostSettings />
+				</div>
 
-			{/* add new comment */}
-			<form className='flex items-center gap-4 px-6 py-4' onSubmit={addComment}>
-				<SentimentSatisfiedAltIcon className=' icon' />
-
-				<input
-					maxLength={40}
-					type='text'
-					value={newComment}
-					onChange={(e) => setNewComment(e.target.value)}
-					placeholder='Add A Comment...'
-					className='flex-1 text-lg bg-transparent border-none outline-none placeholder:text-sm focus:text-black dark:focus:text-white text-zinc-500'
-				/>
-
-				<button
-					type='submit'
-					disabled={isPostBtnDisabled}
-					className='font-bold disabled:text-cyan- disabled:opacity-30 text-light-blue'
+				{/* image */}
+				<div
+					onClick={openModal}
+					className='flex items-center justify-center bg-black border-b border-gray-200 dark:border-dark-border'
 				>
-					Post
-				</button>
-			</form>
-		</div>
+					<img src={image} className='object-contain w-full h-[350px]' alt='' />
+				</div>
+
+				{/* post buttons */}
+				<div className='flex items-center justify-between px-2 py-3'>
+					<div className='flex items-center gap-5'>
+						<FavoriteBorderIcon className='icon' />
+						<ChatBubbleOutlineRoundedIcon className='icon' />
+						<SendOutlinedIcon className='mb-2 text-2xl -rotate-45 icon' />
+					</div>
+
+					<BookmarkBorderIcon className='icon ' />
+				</div>
+
+				{/* post info */}
+				<div className='border-b border-gray-200 dark:border-dark-border'>
+					<div className='flex items-start gap-2 p-2'>
+						<p className='font-bold tracking-wide justify-self-start'>
+							{userName}
+						</p>
+
+						<p className='overflow-scroll hide-scrollbar max-h-[70px] '>
+							{caption}
+						</p>
+					</div>
+
+					{comments.length > 2 && (
+						<p
+							onClick={openModal}
+							className='p-2 pb-3 transition-all duration-300 cursor-pointer hover:text-white text-zinc-400'
+						>
+							View all {comments.length} comments
+						</p>
+					)}
+
+					{/* comments */}
+					{comments.slice(0, 2).map((comment: any) => (
+						<div className='flex items-center justify-between px-2 py-1'>
+							<div className='flex items-center gap-2'>
+								<p className='font-bold'>{comment.data().userName}</p>
+
+								<p>{comment.data().comment}</p>
+							</div>
+
+							<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
+						</div>
+					))}
+
+					<p className='p-2 text-sm text-zinc-500'>
+						{moment(postedAt?.toDate()).fromNow()}
+					</p>
+				</div>
+
+				{/* add new comment */}
+				<form
+					className='flex items-center gap-4 px-6 py-4'
+					onSubmit={addComment}
+				>
+					<SentimentSatisfiedAltIcon className=' icon' />
+
+					<input
+						maxLength={40}
+						type='text'
+						value={newComment}
+						onChange={(e) => setNewComment(e.target.value)}
+						placeholder='Add A Comment...'
+						className='flex-1 text-lg bg-transparent border-none outline-none placeholder:text-sm focus:text-black dark:focus:text-white text-zinc-500'
+					/>
+
+					<button
+						type='submit'
+						disabled={isPostBtnDisabled}
+						className='font-bold disabled:text-cyan- disabled:opacity-30 text-light-blue'
+					>
+						Post
+					</button>
+				</form>
+			</div>
+		</>
 	);
 };
 
