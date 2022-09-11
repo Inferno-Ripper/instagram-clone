@@ -20,7 +20,7 @@ import {
 	serverTimestamp,
 	setDoc,
 } from 'firebase/firestore';
-import { db } from '../pages/firebase';
+import { db } from '../firebase';
 import PostModal from './PostModal';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { useRecoilValue } from 'recoil';
@@ -44,7 +44,7 @@ const Post = ({
 	postedAt,
 }: IPost) => {
 	const [comments, setComments] = useState<any>([]);
-	const [newComment, setNewComment] = useState<string>();
+	const [newComment, setNewComment] = useState<string>('');
 	const [likes, setLikes] = useState<any>([]);
 	const [isLiked, setIsLiked] = useState<boolean>(true);
 	const [isPostBtnDisabled, setIsPostBtnDisabled] = useState<boolean>(true);

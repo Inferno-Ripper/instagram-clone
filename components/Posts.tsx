@@ -1,6 +1,6 @@
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
-import { db } from '../pages/firebase';
+import { db } from '../firebase';
 import Post from './Post';
 
 const Posts = () => {

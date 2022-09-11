@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 
 const Home: NextPage = () => {
 	const [user, setUser] = useRecoilState(userRecoil);

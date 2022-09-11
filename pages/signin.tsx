@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import AppleIcon from '@mui/icons-material/Apple';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { auth, provider } from './firebase';
+import { auth, provider } from '../firebase';
 import {
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,

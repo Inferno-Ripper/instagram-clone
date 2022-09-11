@@ -13,9 +13,10 @@ import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import ThemeChanger from './ThemeChanger';
 import { useTheme } from 'next-themes';
 import { signOut } from 'firebase/auth';
-import { auth } from '../pages/firebase';
+import { auth } from '../firebase';
 import { useRecoilState } from 'recoil';
 import { userRecoil } from '../atoms/userAtom';
+import Link from 'next/link';
 
 export default function AccountDropDownMenu() {
 	const { theme, setTheme } = useTheme();
@@ -97,10 +98,12 @@ export default function AccountDropDownMenu() {
 				transformOrigin={{ horizontal: 'right', vertical: 'top' }}
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 			>
-				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
-					<AccountCircleOutlinedIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-					Profile
-				</MenuItem>
+				<Link href='/me'>
+					<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
+						<AccountCircleOutlinedIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+						Profile
+					</MenuItem>
+				</Link>
 
 				<MenuItem className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'>
 					<BookmarkBorderOutlinedIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />

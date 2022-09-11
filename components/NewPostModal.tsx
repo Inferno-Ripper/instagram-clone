@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 import { useRecoilValue } from 'recoil';
 import { IUser, userRecoil } from '../atoms/userAtom';
-import { db, ref, storage } from '../pages/firebase';
+import { db, ref, storage } from '../firebase';
 import { getDownloadURL, uploadBytes, uploadString } from 'firebase/storage';
 
 const style = {
@@ -44,6 +44,7 @@ export default function NewPostModal() {
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [previewImage, setPreviewImage] = React.useState<string>();
 	const [caption, setCaption] = React.useState<string>();
+	const [captionError, setCaptionError] = React.useState<boolean>();
 	const user: IUser = useRecoilValue(userRecoil);
 
 	const selectFileRef = React.useRef<HTMLInputElement>(null);
@@ -64,6 +65,15 @@ export default function NewPostModal() {
 	}, [selectedFile]);
 
 	const uploadPost = async () => {
+		if (!caption) {
+			setCaptionError(true);
+
+			setTimeout(() => {
+				setCaptionError(false);
+			}, 3000);
+			return;
+		}
+
 		// set loading to true
 		setLoading(true);
 
@@ -111,7 +121,7 @@ export default function NewPostModal() {
 				<Fade in={open}>
 					<Box
 						sx={style}
-						className='p-4 border w-[500px]  outline-none space-y-6 border-gray-200 rounded-lg dark:border-dark-border min-h-[300px]  dark:bg-dark-light bg-full-white'
+						className='p-4 border w-[400px] sm:w-[500px] outline-none space-y-6 border-gray-200 rounded-lg dark:border-dark-border min-h-[300px]  dark:bg-dark-light bg-full-white'
 					>
 						{/* modal header */}
 						<div className='flex items-center justify-center w-full pb-2 border-b-2 border-gray-200 dark:border-dark-border '>
@@ -204,8 +214,12 @@ export default function NewPostModal() {
 								disabled={showPostPreview}
 								value={caption}
 								onChange={(e) => setCaption(e.currentTarget.value)}
-								placeholder='Write a caption...'
-								className='w-full h-20 p-2 overflow-scroll text-2xl bg-transparent outline-none resize-none hide-scrollbar'
+								placeholder={
+									!captionError ? 'Write a caption...' : 'Please Add A Caption'
+								}
+								className={`${
+									captionError ? 'placeholder:text-red-500 animate-pulse' : ''
+								} w-full h-20 p-2 overflow-scroll text-2xl bg-transparent outline-none resize-none hide-scrollbar`}
 							></textarea>
 						)}
 

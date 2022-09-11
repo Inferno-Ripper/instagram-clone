@@ -1,12 +1,14 @@
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Avatar } from '@mui/material';
-import Image from 'next/image';
+import { signOut } from 'firebase/auth';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { IUser, userRecoil } from '../atoms/userAtom';
+import { auth } from '../firebase';
+import Link from 'next/link';
 
 const MiniProfile = (): any => {
-	const user = useRecoilValue<IUser>(userRecoil);
+	const [user, setUser] = useRecoilState<IUser | any>(userRecoil);
 
 	if (!user) return;
 
@@ -24,16 +26,25 @@ const MiniProfile = (): any => {
 				) : (
 					<AccountCircle className='text-gray-500 rounded-full cursor-pointer w-14 h-14' />
 				)}
-				<div className='max-w-[190px] '>
-					<p className='font-medium '>{displayName}</p>
-					<p className='overflow-scroll text-sm text-zinc-500 hide-scrollbar'>
-						{email}
-					</p>
-				</div>
+
+				<Link href='/me'>
+					<div className='max-w-[190px] cursor-pointer'>
+						<p className='font-medium '>{displayName}</p>
+						<p className='overflow-scroll text-sm text-zinc-500 hide-scrollbar'>
+							{email}
+						</p>
+					</div>
+				</Link>
 			</div>
 
-			<button className='text-[14px] font-bold text-light-blue hover:text-blue-700 transition-all duration-300'>
-				Switch
+			<button
+				onClick={() => {
+					setUser(null);
+					signOut(auth);
+				}}
+				className='text-[14px] font-bold text-light-blue hover:text-blue-700 transition-all duration-300'
+			>
+				Sign Out
 			</button>
 		</div>
 	);

@@ -46,7 +46,6 @@ export default function PostModal({
 
 	return (
 		<div>
-			{/* <Button onClick={handleOpen}>Open modal</Button> */}
 			<Modal
 				aria-labelledby='transition-modal-title'
 				aria-describedby='transition-modal-description'
@@ -61,10 +60,10 @@ export default function PostModal({
 				<Fade in={isPostModal}>
 					<Box
 						sx={style}
-						className='p-0 flex flex-col lg:flex-row w-[80vw] h-[720px] items-center border-none outline-none  dark:bg-dark-light bg-full-white rounded-lg'
+						className='p-0 flex flex-col md:flex-row w-[80vw] h-[720px] items-center border-none outline-none  dark:bg-dark-light bg-full-white rounded-lg'
 					>
 						{/* post image large screen size*/}
-						<div className='items-center justify-center hidden w-full h-full bg-black rounded-tl-lg rounded-bl-lg lg:flex '>
+						<div className='items-center justify-center hidden w-full h-full bg-black rounded-tl-lg rounded-bl-lg md:flex '>
 							<img
 								src={image}
 								className='object-contain w-full h-full'
@@ -72,7 +71,7 @@ export default function PostModal({
 							/>
 						</div>
 
-						<div className='flex items-center justify-between w-full p-2 border-b border-gray-200 lg:hidden dark:border-dark-border'>
+						<div className='flex items-center justify-between w-full p-2 border-b border-gray-200 md:hidden dark:border-dark-border'>
 							<div className='flex gap-2 cursor-pointer'>
 								{profilePicture ? (
 									<img
@@ -91,7 +90,7 @@ export default function PostModal({
 						</div>
 
 						{/* post image small screen size*/}
-						<div className='flex items-center justify-center w-full bg-black border-b border-gray-200 lg:hidden dark:border-dark-border'>
+						<div className='flex items-center justify-center w-full bg-black border-b border-gray-200 md:hidden dark:border-dark-border'>
 							<img
 								src={image}
 								className='object-contain w-full h-[300px]'
@@ -100,7 +99,7 @@ export default function PostModal({
 						</div>
 
 						{/* post buttons small screen size*/}
-						<div className='flex items-center justify-between w-full px-2 py-3 lg:hidden'>
+						<div className='flex items-center justify-between w-full px-2 py-3 md:hidden'>
 							<div className='flex items-center gap-5'>
 								{isLiked ? (
 									<FavoriteIcon
@@ -121,29 +120,29 @@ export default function PostModal({
 						</div>
 
 						{/* post likes small screen size*/}
-						{likes.length > 0 && (
-							<p className='flex w-full gap-2 px-2 pb-1 -my-1 font-bold lg:hidden '>
+						{likes?.length > 0 && (
+							<p className='flex w-full gap-2 px-2 pb-1 -my-1 font-bold md:hidden '>
 								{likes?.length}
 								<span>{likes?.length === 1 ? 'like' : 'likes'}</span>
 							</p>
 						)}
 
 						{/* post info small screen size*/}
-						<div className='w-full border-b border-gray-200 lg:hidden dark:border-dark-border'>
+						<div className='w-full border-b border-gray-200 md:hidden dark:border-dark-border'>
 							<div className='flex items-center justify-between p-2 lg:hidden'>
-								<p className='py-2 text-sm text-zinc-400'>
+								<p className='text-sm text-zinc-400'>
 									{moment(postedAt?.toDate()).fromNow()}
 								</p>
 
 								<p className='text-sm transition-all duration-300 cursor-pointer hover:text-white text-zinc-400'>
-									{comments.length} comments
+									{comments?.length} comments
 								</p>
 							</div>
 						</div>
 
-						<div className='flex flex-col justify-between w-full lg:w-1/2 lg:h-full h-2/5 '>
+						<div className='flex flex-col w-full md:w-1/2 md:h-full h-2/5 '>
 							{/* post info */}
-							<div className='items-center justify-between hidden w-full p-2 border-b border-gray-200 lg:flex lg:items-start dark:border-dark-border'>
+							<div className='items-center justify-between hidden w-full p-2 border-b border-gray-200 md:flex md:items-start dark:border-dark-border'>
 								<div className='flex gap-2 cursor-pointer'>
 									{profilePicture ? (
 										<img
@@ -162,7 +161,7 @@ export default function PostModal({
 							</div>
 
 							<div className='flex flex-col justify-between w-full h-full overflow-scroll overflow-x-hidden scrollbar-thin scroll-smooth scrollbar-thumb-zinc-500'>
-								<div className='flex-1 w-full overflow-scroll overflow-x-hidden scrollbar-thin scroll-smooth scrollbar-thumb-zinc-500'>
+								<div className='flex-1 w-full max-h-[200px] md:max-h-full overflow-scroll overflow-x-hidden  scrollbar-thin scroll-smooth scrollbar-thumb-zinc-500'>
 									<div className='flex items-start w-full gap-2 p-2'>
 										{profilePicture ? (
 											<img
@@ -180,38 +179,46 @@ export default function PostModal({
 											{caption}
 										</p>
 									</div>
-									{comments.map((comment: any) => (
-										<div
-											key={comment.id}
-											className='flex items-center justify-between px-2 py-2 break-words'
-										>
-											<div className='flex items-center gap-2 '>
-												{comment.data().profilePicture ? (
-													<img
-														className='hidden w-10 h-10 mr-1 rounded-full sm:flex'
-														src={comment.data().profilePicture}
-													/>
-												) : (
-													<AccountCircleIcon className='hidden w-12 h-12 -ml-1 text-gray-500 sm:flex ' />
-												)}
-												<div className='flex gap-2 '>
-													<p className='font-bold whitespace-nowrap'>
-														{comment.data().userName}
-													</p>
 
-													<p className='pr-2 break-all'>
-														{comment.data().comment}
-													</p>
+									{comments?.map((comment: any) => (
+										<div key={comment.id}>
+											<div className='flex items-center justify-between px-2 py-2 break-words '>
+												<div className='flex items-center gap-2 '>
+													{comment.data().profilePicture ? (
+														<img
+															className='hidden w-10 h-10 mr-1 rounded-full sm:flex'
+															src={comment.data().profilePicture}
+														/>
+													) : (
+														<AccountCircleIcon className='hidden w-12 h-12 -ml-1 text-gray-500 sm:flex ' />
+													)}
+
+													<div className='flex gap-2 '>
+														<div>
+															<p className='font-bold whitespace-nowrap'>
+																{comment.data().userName}
+															</p>
+														</div>
+														<p className='pr-2 break-all'>
+															{comment.data().comment}
+														</p>
+													</div>
 												</div>
+
+												<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
 											</div>
 
-											<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
+											<p className='px-2 -mt-2 text-xs whitespace-nowrap text-zinc-500'>
+												{moment(
+													comment?.data()?.timestamp?.toDate()
+												)?.fromNow()}
+											</p>
 										</div>
 									))}
 								</div>
 
 								{/* post buttons */}
-								<div className='items-center justify-between hidden px-2 py-3 border-t border-gray-200 lg:flex dark:border-dark-border '>
+								<div className='items-center justify-between hidden px-2 py-3 border-t border-gray-200 md:flex dark:border-dark-border '>
 									<div className='flex items-center gap-5'>
 										{isLiked ? (
 											<FavoriteIcon
@@ -231,10 +238,10 @@ export default function PostModal({
 									<BookmarkBorderIcon className='icon ' />
 								</div>
 
-								<div className='hidden px-2 lg:block'>
+								<div className='hidden px-2 md:block'>
 									{/* post likes small screen size*/}
-									{likes.length > 0 && (
-										<p className='hidden w-full gap-2 px-2 pb-1 -my-1 font-bold lg:flex '>
+									{likes?.length > 0 && (
+										<p className='hidden w-full gap-2 px-2 pb-1 -my-1 font-bold md:flex '>
 											{likes?.length}
 											<span>{likes?.length === 1 ? 'like' : 'likes'}</span>
 										</p>
