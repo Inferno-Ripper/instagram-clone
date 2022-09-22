@@ -13,7 +13,7 @@ import {
 	updateProfile,
 } from 'firebase/auth';
 import { useRecoilState } from 'recoil';
-import { IUser, userRecoil } from '../atoms/userAtom';
+import { userRecoil } from '../atoms/userAtom';
 import { useRouter } from 'next/router';
 import Lottie from 'react-lottie';
 import instagramPhoneAnimation from '../instagram-phone-animation.json';

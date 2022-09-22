@@ -239,14 +239,14 @@ export default function NewPostModal() {
 										<button
 											onClick={uploadPost}
 											disabled={loading}
-											className='flex items-center gap-4 px-6 py-1 font-medium text-white transition-all duration-300 bg-blue-500 rounded disabled:bg-blue-600 hover:bg-blue-600 '
+											className='flex items-center gap-4 px-6 py-1 font-medium text-white transition-all duration-300 bg-blue-500 rounded whitespace-nowrap disabled:bg-blue-600 hover:bg-blue-600 '
 										>
 											{loading ? 'uploading' : 'upload'}
 
 											{loading && (
 												<img
-													src='/uploading.svg'
-													className='w-3 h-3 text-white'
+													src='/loading-spinner.svg'
+													className='h-6 pr-2'
 													alt='uploading svg'
 												/>
 											)}

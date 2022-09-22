@@ -94,6 +94,7 @@ const Post = ({
 		setNewComment('');
 
 		await addDoc(collection(db, 'posts', postId, 'comments'), {
+			uid: user.uid,
 			userName: user.displayName,
 			profilePicture: user.photo,
 			comment: commentToSend,

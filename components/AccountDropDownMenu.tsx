@@ -124,7 +124,7 @@ export default function AccountDropDownMenu() {
 					<ThemeChanger />
 				</MenuItem>
 
-				<Divider />
+				<Divider className='bg-gray-200 dark:bg-dark-border ' />
 
 				<MenuItem
 					className='flex items-center w-56 gap-4 group dark:hover:bg-dark-dark'

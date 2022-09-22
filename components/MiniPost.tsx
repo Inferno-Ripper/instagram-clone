@@ -66,6 +66,7 @@ const MiniPost = ({
 		setNewComment('');
 
 		await addDoc(collection(db, 'posts', postId, 'comments'), {
+			uid: user.uid,
 			userName: user.displayName,
 			profilePicture: user.photo,
 			comment: commentToSend,
@@ -123,11 +124,11 @@ const MiniPost = ({
 				onClick={openModal}
 			>
 				<div className='flex items-center gap-2 '>
-					<FavoriteIcon /> {comments?.length}
+					<FavoriteIcon /> {likes?.length}
 				</div>
 
 				<div className='flex items-center gap-2'>
-					<ModeCommentIcon /> {likes?.length}
+					<ModeCommentIcon /> {comments?.length}
 				</div>
 			</div>
 

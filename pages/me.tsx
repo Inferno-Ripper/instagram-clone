@@ -2,24 +2,18 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import Header from '../components/Header';
 import { auth, db } from '../firebase';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SettingsIcon from '@mui/icons-material/Settings';
 import AppsIcon from '@mui/icons-material/Apps';
 import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
-import {
-	collection,
-	onSnapshot,
-	orderBy,
-	query,
-	where,
-} from 'firebase/firestore';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import MiniPost from '../components/MiniPost';
+import UserSettingsDropDownMenu from '../components/UserSettingsDropDownMenu';
 
 const me: NextPage = () => {
 	const router = useRouter();
@@ -42,10 +36,7 @@ const me: NextPage = () => {
 	useEffect(() => {
 		if (user) {
 			onSnapshot(
-				query(
-					collection(db, 'posts'),
-					where('userName', '==', user?.displayName)
-				),
+				query(collection(db, 'posts'), where('uid', '==', user?.uid)),
 				(snapshot) => {
 					setUserPosts(snapshot.docs);
 				}
@@ -78,17 +69,21 @@ const me: NextPage = () => {
 
 							<div className='md:space-y-6 min-w-[200px] w-auto'>
 								<div className='gap-4 space-y-4 md:items-center md:space-y-0 md:flex md:justify-between'>
-									<div className='flex items-center justify-between'>
+									<div className='flex items-center justify-between '>
 										<h1 className='text-2xl'>{user?.displayName}</h1>
-										<SettingsIcon className='text-2xl text-gray-800 cursor-pointer md:hidden hover:text-black dark:text-white' />
+										<div className=' md:hidden'>
+											<UserSettingsDropDownMenu />
+										</div>
 									</div>
 
 									<div className='flex items-center gap-4'>
-										<button className='px-20 py-1 transition-all duration-300 border-2 border-gray-200 rounded-md md:px-4 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black dark:border-dark-border'>
+										<button className='px-20 py-1 font-medium transition-all duration-300 border-2 border-gray-200 rounded-md md:px-4 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black dark:border-dark-border'>
 											Edit Profile
 										</button>
 
-										<SettingsIcon className='hidden text-2xl text-gray-800 cursor-pointer md:block hover:text-black dark:text-white' />
+										<div className='hidden md:block'>
+											<UserSettingsDropDownMenu />
+										</div>
 									</div>
 								</div>
 
@@ -139,7 +134,7 @@ const me: NextPage = () => {
 						</div>
 
 						<div className='flex items-center justify-around py-5 border-gray-200 md:border-t dark:border-dark-border'>
-							<div className='flex items-center gap-1 transition-all duration-300 cursor-pointer hover:text-light-blue'>
+							<div className='flex items-center gap-1 transition-all duration-300 cursor-pointer hover:text-light-blue '>
 								<AppsIcon className='md:text-[20px] text-light-blue' />
 								<p className='hidden text-black dark:text-white md:block dark:hover:text-light-blue hover:text-light-blue'>
 									POSTS
