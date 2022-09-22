@@ -6,11 +6,26 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTheme } from 'next-themes';
+import { useRecoilState } from 'recoil';
+import { IUser, userRecoil } from '../atoms/userAtom';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import BookmarkAddOutlinedIcon from '@mui/icons-material/BookmarkAddOutlined';
+import OpenInFullOutlinedIcon from '@mui/icons-material/OpenInFullOutlined';
+import CloseFullscreenOutlinedIcon from '@mui/icons-material/CloseFullscreenOutlined';
+import { deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 const ITEM_HEIGHT = 48;
 
-export default function PostSettings() {
+export default function PostSettings({
+	uid,
+	openModal,
+	isPostModal,
+	closeModal,
+	postId,
+}: any) {
 	const { theme, setTheme } = useTheme();
+	const [user, setUser] = useRecoilState<IUser | any>(userRecoil);
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
@@ -19,6 +34,10 @@ export default function PostSettings() {
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const deletePost = () => {
+		deleteDoc(doc(db, 'posts', postId));
 	};
 
 	return (
@@ -53,19 +72,32 @@ export default function PostSettings() {
 					},
 				}}
 			>
-				<MenuItem
-					className='flex gap-3 dark:hover:bg-dark-dark'
-					onClick={handleClose}
-				>
-					<EditIcon />
-					Edit Post
+				<MenuItem className=' dark:hover:bg-dark-dark' onClick={handleClose}>
+					{uid === user.uid ? (
+						<div className='flex gap-3 ' onClick={deletePost}>
+							<DeleteIcon />
+							<p>Delete Post</p>
+						</div>
+					) : (
+						<div className='flex gap-3 '>
+							<BookmarkAddOutlinedIcon />
+							<p>Save Post</p>
+						</div>
+					)}
 				</MenuItem>
-				<MenuItem
-					className='flex gap-3 dark:hover:bg-dark-dark '
-					onClick={handleClose}
-				>
-					<DeleteIcon />
-					Delete Post
+
+				<MenuItem className=' dark:hover:bg-dark-dark' onClick={handleClose}>
+					{!isPostModal ? (
+						<div onClick={openModal} className='flex gap-3 '>
+							<OpenInFullOutlinedIcon />
+							<p>View Post</p>
+						</div>
+					) : (
+						<div onClick={closeModal} className='flex gap-3 '>
+							<CloseFullscreenOutlinedIcon />
+							<p>Close Post</p>
+						</div>
+					)}
 				</MenuItem>
 			</Menu>
 		</div>

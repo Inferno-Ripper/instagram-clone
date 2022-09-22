@@ -14,6 +14,7 @@ import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import MiniPost from '../components/MiniPost';
 import UserSettingsDropDownMenu from '../components/UserSettingsDropDownMenu';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 
 const me: NextPage = () => {
 	const router = useRouter();
@@ -142,7 +143,7 @@ const me: NextPage = () => {
 							</div>
 
 							<div className='flex items-center gap-1 text-gray-500 transition-all duration-300 cursor-pointer hover:text-light-blue'>
-								<OndemandVideoOutlinedIcon className='md:text-[20px]' />
+								<BookmarkBorderOutlinedIcon className='md:text-[20px]' />
 								<p className='hidden md:block'>SAVED</p>
 							</div>
 

@@ -41,6 +41,8 @@ export default function PostModal({
 	likes,
 	likePost,
 	isLiked,
+	uid,
+	postId,
 }: any) {
 	const commentRef = React.useRef<HTMLInputElement>(null);
 
@@ -86,7 +88,12 @@ export default function PostModal({
 								</p>
 							</div>
 
-							<PostSettings />
+							<PostSettings
+								uid={uid}
+								isPostModal={isPostModal}
+								closeModal={closeModal}
+								postId={postId}
+							/>
 						</div>
 
 						{/* post image small screen size*/}
@@ -157,7 +164,12 @@ export default function PostModal({
 									</p>
 								</div>
 
-								<PostSettings />
+								<PostSettings
+									uid={uid}
+									isPostModal={isPostModal}
+									closeModal={closeModal}
+									postId={postId}
+								/>
 							</div>
 
 							<div className='flex flex-col justify-between w-full h-full overflow-scroll overflow-x-hidden scrollbar-thin scroll-smooth scrollbar-thumb-zinc-500'>

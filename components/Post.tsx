@@ -146,6 +146,8 @@ const Post = ({
 				likes={likes}
 				likePost={likePost}
 				isLiked={isLiked}
+				uid={uid}
+				postId={postId}
 			/>
 
 			<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
@@ -165,7 +167,7 @@ const Post = ({
 						</p>
 					</div>
 
-					<PostSettings />
+					<PostSettings uid={uid} openModal={openModal} postId={postId} />
 				</div>
 
 				{/* image */}

@@ -241,7 +241,7 @@ export default function NewPostModal() {
 											disabled={loading}
 											className='flex items-center gap-4 px-6 py-1 font-medium text-white transition-all duration-300 bg-blue-500 rounded whitespace-nowrap disabled:bg-blue-600 hover:bg-blue-600 '
 										>
-											{loading ? 'uploading' : 'upload'}
+											{loading ? 'Posting' : 'Post'}
 
 											{loading && (
 												<img

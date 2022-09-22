@@ -36,7 +36,7 @@ export default function Loading(): any {
 
 	return (
 		loading && (
-			<div className='flex items-center justify-center w-screen h-screen text-black dark:text-white bg-dark-white dark:bg-dark-dark'>
+			<div className='flex z-[9999] items-center justify-center w-screen h-screen text-black dark:text-white bg-dark-white dark:bg-dark-dark'>
 				<div className='spinner'>
 					{' '}
 					<Lottie height={500} width={500} options={defaultOptions} />
