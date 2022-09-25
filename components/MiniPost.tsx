@@ -115,7 +115,7 @@ const MiniPost = ({
 				src={postImage}
 				// className='object-cover w-full h-44 md:h-56 lg:h-72'
 				className='object-cover h-40 w-[300px] md:h-[280px] sm:h-52  group-hover:brightness-50  '
-				alt='image'
+				alt=''
 				onClick={openModal}
 			/>
 
@@ -123,12 +123,13 @@ const MiniPost = ({
 				className='absolute flex flex-col gap-4 font-bold opacity-0 md:gap-6 md:flex-row group-hover:opacity-100 item s-center inset-1/3 '
 				onClick={openModal}
 			>
-				<div className='flex items-center gap-2 '>
-					<FavoriteIcon /> {likes?.length}
+				<div className='flex items-center gap-2 text-white'>
+					<FavoriteIcon />
+					<p className='text-white'>{likes?.length}</p>
 				</div>
 
-				<div className='flex items-center gap-2'>
-					<ModeCommentIcon /> {comments?.length}
+				<div className='flex items-center gap-2 text-white'>
+					<ModeCommentIcon /> <p>{comments?.length}</p>
 				</div>
 			</div>
 

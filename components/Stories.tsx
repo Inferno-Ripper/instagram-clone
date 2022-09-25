@@ -17,7 +17,7 @@ const Stories = () => {
 	const createRandomUser = (): IUser => {
 		return {
 			userId: faker.datatype.uuid(),
-			userName: faker.internet.userName(),
+			userName: faker.name.firstName(),
 			avatar: faker.image.avatar(),
 		};
 	};
@@ -41,7 +41,7 @@ const Stories = () => {
 	return (
 		<div
 			ref={storiesScrollbar}
-			className='hide-scrollbar relative border rounded-lg h-32 p-1 scroll-smooth overflow-scroll whitespace-nowrap border-gray-200 flex  items-center bg-full-white w-[500px] dark:bg-dark-light dark:border-dark-border'
+			className='hide-scrollbar  w-[400px] relative border rounded-lg h-28 sm:h-32 p-1 scroll-smooth overflow-scroll whitespace-nowrap border-gray-200 flex  items-center bg-full-white sm:w-[500px] dark:bg-dark-light dark:border-dark-border'
 		>
 			{/* left scroll button */}
 			<div

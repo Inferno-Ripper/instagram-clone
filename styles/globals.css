@@ -40,7 +40,7 @@ body {
 	}
 
 	.suggested-users-page-link {
-		@apply text-sm font-bold dark:text-[#1a437d] text-[#003782] cursor-pointer hover:underline underline-offset-2;
+		@apply text-[#00315E] hover:underline text-xs cursor-pointer dark:text-[#26508b];
 	}
 
 	.page-link {

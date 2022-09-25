@@ -1,30 +1,7 @@
-import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
 import instagramLogoLoading from '../instagram-logo-loading.json';
 
 export default function Loading(): any {
-	const router = useRouter();
-
-	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		const handleStart = (url: any) => url !== router.asPath && setLoading(true);
-		const handleComplete = (url: any) =>
-			url === router.asPath && setLoading(false);
-
-		router.events.on('routeChangeStart', handleStart);
-		router.events.on('routeChangeComplete', handleComplete);
-		router.events.on('routeChangeError', handleComplete);
-
-		console.log('first');
-		return () => {
-			router.events.off('routeChangeStart', handleStart);
-			router.events.off('routeChangeComplete', handleComplete);
-			router.events.off('routeChangeError', handleComplete);
-		};
-	});
-
 	const defaultOptions = {
 		loop: true,
 		autoplay: true,
@@ -35,13 +12,8 @@ export default function Loading(): any {
 	};
 
 	return (
-		loading && (
-			<div className='flex z-[9999] items-center justify-center w-screen h-screen text-black dark:text-white bg-dark-white dark:bg-dark-dark'>
-				<div className='spinner'>
-					{' '}
-					<Lottie height={500} width={500} options={defaultOptions} />
-				</div>
-			</div>
-		)
+		<div className='flex z-[9999] fixed top-0 left-0 bg-transparent items-center justify-center w-screen h-screen'>
+			<Lottie height={200} width={200} options={defaultOptions} />
+		</div>
 	);
 }

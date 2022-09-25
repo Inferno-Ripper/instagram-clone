@@ -128,7 +128,7 @@ const Post = ({
 	};
 
 	return (
-		<>
+		<div className='flex items-center justify-center '>
 			<PostModal
 				isPostModal={isPostModal}
 				setIsPostModal={setIsPostModal}
@@ -150,7 +150,7 @@ const Post = ({
 				postId={postId}
 			/>
 
-			<div className='w-[500px] dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
+			<div className='w-[400px] sm:w-[500px]  dark:bg-dark-light border-gray-200 dark:border-dark-border border rounded-lg  bg-full-white h-auto'>
 				{/* user info */}
 				<div className='flex items-center justify-between p-2 border-b border-gray-200 dark:border-dark-border'>
 					<div className='flex gap-2 cursor-pointer'>
@@ -274,7 +274,7 @@ const Post = ({
 					</button>
 				</form>
 			</div>
-		</>
+		</div>
 	);
 };
 

@@ -5,7 +5,7 @@ import Feed from '../components/Feed';
 import Header from '../components/Header';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { IUser, userRecoil } from '../atoms/userAtom';
+import { userRecoil } from '../atoms/userAtom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase';
 
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 				router.push('/signin');
 			}
 		});
-	}, []);
+	}, [auth]);
 
 	return (
 		<div>

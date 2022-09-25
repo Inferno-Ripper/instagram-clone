@@ -73,7 +73,7 @@ export default function PostSettings({
 				}}
 			>
 				<MenuItem className=' dark:hover:bg-dark-dark' onClick={handleClose}>
-					{uid === user.uid ? (
+					{uid === user?.uid ? (
 						<div className='flex gap-3 ' onClick={deletePost}>
 							<DeleteIcon />
 							<p>Delete Post</p>

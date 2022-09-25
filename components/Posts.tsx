@@ -16,7 +16,7 @@ const Posts = () => {
 	}, []);
 
 	return (
-		<div className='flex flex-col gap-4 pb-4'>
+		<div className='flex flex-col gap-5 pb-4'>
 			{posts?.map((post: any) => {
 				return (
 					<Post

@@ -26,11 +26,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import PasswordIcon from '@mui/icons-material/Password';
 import EmailIcon from '@mui/icons-material/Email';
+import Loading from './Loading';
 
 export default function UserSettingsDropDownMenu() {
 	const { theme, setTheme } = useTheme();
 	const [user, setUser] = useRecoilState<IUser | null>(userRecoil);
 	const [selectedFile, setSelectedFile] = React.useState<any>();
+	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
@@ -53,6 +55,7 @@ export default function UserSettingsDropDownMenu() {
 	React.useEffect(() => {
 		const changeProfilePicture = async () => {
 			if (auth.currentUser || user) {
+				setIsLoading(true);
 				// upload image to firebase storage
 				const imgRef = ref(storage, `user/${user?.uid}/profile-picture`);
 
@@ -131,6 +134,8 @@ export default function UserSettingsDropDownMenu() {
 						});
 					}
 				});
+
+				setIsLoading(false);
 			}
 		};
 		if (selectedFile) {
@@ -140,154 +145,166 @@ export default function UserSettingsDropDownMenu() {
 
 	return (
 		<>
-			<input
-				type='file'
-				hidden
-				// only accept images
-				accept='image/*'
-				onChange={(event: any) => {
-					const file: any = event.target.files[0];
+			{isLoading ? (
+				<Loading />
+			) : (
+				<>
+					<input
+						type='file'
+						hidden
+						// only accept images
+						accept='image/*'
+						onChange={(event: any) => {
+							const file: any = event.target.files[0];
 
-					if (file && file.type.substr(0, 5) === 'image') {
-						setSelectedFile(file);
-					} else {
-						// clears the selected file
-						// setSelectedFile(null);
-					}
-				}}
-				ref={selectFileRef}
-			/>
+							if (file && file.type.substr(0, 5) === 'image') {
+								setSelectedFile(file);
+							} else {
+								// clears the selected file
+								// setSelectedFile(null);
+							}
+						}}
+						ref={selectFileRef}
+					/>
 
-			<Box
-				sx={{
-					display: 'flex',
-					alignItems: 'center',
-					textAlign: 'center',
-				}}
-			>
-				<Tooltip title='Account settings'>
-					<IconButton
-						onClick={handleClick}
-						size='small'
-						// sx={{ ml: 2 }}
-						aria-controls={open ? 'account-menu' : undefined}
-						aria-haspopup='true'
-						aria-expanded={open ? 'true' : undefined}
+					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+							textAlign: 'center',
+						}}
 					>
-						<SettingsIcon
-							className={`${
-								anchorEl ? 'rotate-45' : ''
-							} text-2xl text-gray-800 cursor-pointer transition-all duration-300 hover:text-black dark:text-white`}
-						/>
-					</IconButton>
-				</Tooltip>
-			</Box>
-			<Menu
-				anchorEl={anchorEl}
-				id='account-menu'
-				open={open}
-				onClose={handleClose}
-				onClick={handleClose}
-				PaperProps={{
-					elevation: 0,
-					sx: {
-						overflow: 'visible',
-						filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-						mt: 1.5,
-						border:
-							theme === 'dark' ? '1px solid #393A3B' : '1px solid lightgray',
-						backgroundColor: theme === 'dark' ? '#242526' : '#FFFFFF',
-						color: theme === 'dark' ? 'white' : 'black',
+						<Tooltip title='Account settings'>
+							<IconButton
+								onClick={handleClick}
+								size='small'
+								// sx={{ ml: 2 }}
+								aria-controls={open ? 'account-menu' : undefined}
+								aria-haspopup='true'
+								aria-expanded={open ? 'true' : undefined}
+							>
+								<SettingsIcon
+									className={`${
+										anchorEl ? 'rotate-45' : ''
+									} text-2xl text-gray-800 cursor-pointer transition-all duration-300 hover:text-black dark:text-white`}
+								/>
+							</IconButton>
+						</Tooltip>
+					</Box>
+					<Menu
+						anchorEl={anchorEl}
+						id='account-menu'
+						open={open}
+						onClose={handleClose}
+						onClick={handleClose}
+						PaperProps={{
+							elevation: 0,
+							sx: {
+								overflow: 'visible',
+								filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+								mt: 1.5,
+								border:
+									theme === 'dark'
+										? '1px solid #393A3B'
+										: '1px solid lightgray',
+								backgroundColor: theme === 'dark' ? '#242526' : '#FFFFFF',
+								color: theme === 'dark' ? 'white' : 'black',
 
-						'& .MuiAvatar-root': {
-							width: 32,
-							height: 32,
-							ml: -0.5,
-							mr: 1,
-						},
-						'&:before': {
-							content: '""',
-							display: 'block',
-							position: 'absolute',
-							top: 0,
-							right: 14,
-							width: 10,
-							height: 10,
-							bgcolor: 'background.paper',
-							transform: 'translateY(-50%) rotate(45deg)',
-							zIndex: 0,
-							borderTop:
-								theme === 'dark' ? '1px solid #393A3B' : '1px solid lightgray',
-							borderLeft:
-								theme === 'dark' ? '1px solid #393A3B' : '1px solid lightgray',
-							backgroundColor: theme === 'dark' ? '#242526' : '#FFFFFF',
-						},
-					},
-				}}
-				transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-			>
-				<MenuItem
-					onClick={() => {
-						setChangeUserData('userName');
-						openModal();
-					}}
-					className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
-				>
-					<PersonIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-					Change User Name
-				</MenuItem>
+								'& .MuiAvatar-root': {
+									width: 32,
+									height: 32,
+									ml: -0.5,
+									mr: 1,
+								},
+								'&:before': {
+									content: '""',
+									display: 'block',
+									position: 'absolute',
+									top: 0,
+									right: 14,
+									width: 10,
+									height: 10,
+									bgcolor: 'background.paper',
+									transform: 'translateY(-50%) rotate(45deg)',
+									zIndex: 0,
+									borderTop:
+										theme === 'dark'
+											? '1px solid #393A3B'
+											: '1px solid lightgray',
+									borderLeft:
+										theme === 'dark'
+											? '1px solid #393A3B'
+											: '1px solid lightgray',
+									backgroundColor: theme === 'dark' ? '#242526' : '#FFFFFF',
+								},
+							},
+						}}
+						transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+						anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+					>
+						<MenuItem
+							onClick={() => {
+								setChangeUserData('userName');
+								openModal();
+							}}
+							className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
+						>
+							<PersonIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+							Change User Name
+						</MenuItem>
 
-				<MenuItem
-					onClick={() => selectFileRef?.current?.click()}
-					className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
-				>
-					<InsertPhotoIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-					Change Profile Picture
-				</MenuItem>
+						<MenuItem
+							onClick={() => selectFileRef?.current?.click()}
+							className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
+						>
+							<InsertPhotoIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+							Change Profile Picture
+						</MenuItem>
 
-				<MenuItem
-					onClick={() => {
-						setChangeUserData('email');
-						openModal();
-					}}
-					className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
-				>
-					<EmailIcon />
-					Change Email Address
-				</MenuItem>
+						<MenuItem
+							onClick={() => {
+								setChangeUserData('email');
+								openModal();
+							}}
+							className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
+						>
+							<EmailIcon />
+							Change Email Address
+						</MenuItem>
 
-				<MenuItem
-					onClick={() => {
-						setChangeUserData('password');
-						openModal();
-					}}
-					className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
-				>
-					<PasswordIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-					Change Password
-				</MenuItem>
+						<MenuItem
+							onClick={() => {
+								setChangeUserData('password');
+								openModal();
+							}}
+							className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
+						>
+							<PasswordIcon className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+							Change Password
+						</MenuItem>
 
-				<Divider className='bg-gray-200 dark:bg-dark-border ' />
+						<Divider className='bg-gray-200 dark:bg-dark-border ' />
 
-				<MenuItem
-					className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
-					onClick={() => {
-						setUser(null);
-						signOut(auth);
-					}}
-				>
-					<Logout className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
-					Logout
-				</MenuItem>
-			</Menu>
+						<MenuItem
+							className='flex items-center gap-4 w-60 group dark:hover:bg-dark-dark'
+							onClick={() => {
+								setUser(null);
+								signOut(auth);
+							}}
+						>
+							<Logout className='text-gray-800 dark:text-white dark:group-hover:text-white group-hover:text-black' />
+							Logout
+						</MenuItem>
+					</Menu>
 
-			<ChangeUserDataModal
-				isChangeUserDataModal={isChangeUserDataModal}
-				closeModal={closeModal}
-				changeUserData={changeUserData}
-				setChangeUserData={setChangeUserData}
-			/>
+					<ChangeUserDataModal
+						isChangeUserDataModal={isChangeUserDataModal}
+						closeModal={closeModal}
+						changeUserData={changeUserData}
+						setChangeUserData={setChangeUserData}
+					/>
+				</>
+			)}
 		</>
 	);
 }

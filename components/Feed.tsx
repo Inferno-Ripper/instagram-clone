@@ -31,14 +31,14 @@ const Feed = () => {
 			userId: faker.datatype.uuid(),
 			userName: faker.internet.userName(),
 			avatar: faker.image.avatar(),
-			followedBy: `Followed By ${faker.name.fullName()}, ${faker.name.fullName()}`,
+			followedBy: `Followed By ${faker.name.firstName()}, ${faker.name.firstName()}`,
 		};
 	};
 
 	return (
 		<main className='flex gap-10 pt-6  justify-center min-h-[93vh] h-auto text-black dark:text-white bg-dark-white dark:bg-dark-dark '>
 			{/* stories and posts section */}
-			<section className='flex flex-col gap-2'>
+			<section className='flex flex-col gap-6'>
 				<Stories />
 				<Posts />
 			</section>

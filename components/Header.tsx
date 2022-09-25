@@ -11,14 +11,17 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import Link from 'next/link';
 import NewPostModal from './NewPostModal';
 import ThemeChanger from './ThemeChanger';
-
+import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { userRecoil } from '../atoms/userAtom';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 const Header = () => {
 	const [followingAndFavoritesMenu, setFollowingAndFavoritesMenu] =
 		useState<boolean>(false);
 	const user = useRecoilValue(userRecoil);
+
+	const router = useRouter();
 
 	return (
 		<div className='sticky top-0 z-50 flex items-center justify-around w-full p-1 py-3 border-b border-gray-200 shadow-sm sm:p-3 dark:border-dark-border dark:bg-dark-light lg:justify-center md:gap-5 lg:gap-28 bg-full-white'>
@@ -70,7 +73,13 @@ const Header = () => {
 			<div className='relative flex items-center gap-4 sm:gap-6'>
 				{user ? (
 					<>
-						<HomeRoundedIcon className='text-3xl icon' />
+						<Link href='/'>
+							{router.pathname === '/' ? (
+								<HomeRoundedIcon className='text-3xl icon' />
+							) : (
+								<HomeOutlinedIcon className='text-3xl icon' />
+							)}
+						</Link>
 						<SendOutlinedIcon className='mb-1 text-2xl -rotate-45 icon' />
 						<NewPostModal />
 						<ExploreOutlinedIcon className='icon' />

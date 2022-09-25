@@ -14,8 +14,8 @@ import {
 	query,
 	updateDoc,
 	where,
-	writeBatch,
 } from 'firebase/firestore';
+import Loading from './Loading';
 
 const style = {
 	position: 'absolute' as 'absolute',
@@ -192,143 +192,129 @@ export default function ChangeUserDataModal({
 	};
 
 	return (
-		<div>
-			<Modal
-				aria-labelledby='transition-modal-title'
-				aria-describedby='transition-modal-description'
-				open={isChangeUserDataModal}
-				onClose={closeModal}
-				closeAfterTransition
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 500,
-				}}
-			>
-				<Fade in={isChangeUserDataModal}>
-					<Box
-						sx={style}
-						className='flex items-center justify-center bg-white border border-gray-200 rounded-lg outline-none dark:bg-dark-light dark:border-dark-border'
+		<>
+			{loading ? (
+				<Loading />
+			) : (
+				<div>
+					<Modal
+						aria-labelledby='transition-modal-title'
+						aria-describedby='transition-modal-description'
+						open={isChangeUserDataModal}
+						onClose={closeModal}
+						closeAfterTransition
+						BackdropComponent={Backdrop}
+						BackdropProps={{
+							timeout: 500,
+						}}
 					>
-						<div>
-							{changeUserData === 'userName' ? (
-								<form className='space-y-4'>
-									<h1 className='pl-1 text-xl font-medium'>Change User Name</h1>
+						<Fade in={isChangeUserDataModal}>
+							<Box
+								sx={style}
+								className='flex items-center justify-center bg-white border border-gray-200 rounded-lg outline-none dark:bg-dark-light dark:border-dark-border'
+							>
+								<div>
+									{changeUserData === 'userName' ? (
+										<form className='space-y-4'>
+											<h1 className='pl-1 text-xl font-medium'>
+												Change User Name
+											</h1>
 
-									<input
-										className='h-10 px-4 border-none rounded-lg outline-none w-80 focus:text-black dark:focus:text-white bg-[#EFEFEF] dark:bg-[#4E4F50]  text-zinc-400'
-										placeholder='Enter New User Name'
-										value={newValue}
-										onChange={(e: any) => setNewValue(e.target.value)}
-									/>
+											<input
+												className='h-10 px-4 border-none rounded-lg outline-none w-80 focus:text-black dark:focus:text-white bg-[#EFEFEF] dark:bg-[#4E4F50]  text-zinc-400'
+												placeholder='Enter New User Name'
+												value={newValue}
+												onChange={(e: any) => setNewValue(e.target.value)}
+											/>
 
-									<div className='flex justify-center'>
-										<button
-											type='submit'
-											onClick={changeUserName}
-											disabled={!newValue || newValue === user?.displayName}
-											className='flex items-center justify-center w-40 gap-2 px-6 py-1 font-semibold tracking-wide text-white transition-all duration-300 rounded-md disabled:cursor-not-allowed disabled:scale-100 disabled:bg-blue-400 whitespace-nowrap hover:scale-105 hover:bg-blue-600 bg-light-blue'
-										>
-											{loading ? 'Please Wait' : 'Submit'}
+											<div className='flex justify-center'>
+												<button
+													type='submit'
+													onClick={changeUserName}
+													disabled={!newValue || newValue === user?.displayName}
+													className='flex items-center justify-center w-40 gap-2 px-6 py-1 font-semibold tracking-wide text-white transition-all duration-300 rounded-md disabled:cursor-not-allowed disabled:scale-100 disabled:bg-blue-400 whitespace-nowrap hover:scale-105 hover:bg-blue-600 bg-light-blue'
+												>
+													Submit
+												</button>
+											</div>
+										</form>
+									) : changeUserData === 'email' ? (
+										<form className='space-y-4'>
+											<h1 className='pl-1 text-xl font-medium'>
+												Change Email Address
+											</h1>
 
-											{loading && (
-												<img
-													src='/loading-spinner.svg'
-													className='h-6'
-													alt='uploading svg'
-												/>
-											)}
-										</button>
-									</div>
-								</form>
-							) : changeUserData === 'email' ? (
-								<form className='space-y-4'>
-									<h1 className='pl-1 text-xl font-medium'>
-										Change Email Address
-									</h1>
+											<input
+												type='email'
+												className='h-10 px-4 border-none rounded-lg outline-none w-80 focus:text-black dark:focus:text-white bg-[#EFEFEF] dark:bg-[#4E4F50]  text-zinc-400'
+												placeholder='Enter New Email Address'
+												value={newValue}
+												onChange={(e: any) => setNewValue(e.target.value)}
+											/>
 
-									<input
-										type='email'
-										className='h-10 px-4 border-none rounded-lg outline-none w-80 focus:text-black dark:focus:text-white bg-[#EFEFEF] dark:bg-[#4E4F50]  text-zinc-400'
-										placeholder='Enter New Email Address'
-										value={newValue}
-										onChange={(e: any) => setNewValue(e.target.value)}
-									/>
+											<div className='flex justify-center'>
+												<button
+													type='submit'
+													onClick={changeEmail}
+													disabled={!newValue || newValue === user?.email}
+													className='flex items-center justify-center w-40 gap-2 px-6 py-1 font-semibold tracking-wide text-white transition-all duration-300 rounded-md disabled:cursor-not-allowed disabled:scale-100 disabled:bg-blue-400 whitespace-nowrap hover:scale-105 hover:bg-blue-600 bg-light-blue'
+												>
+													Submit
+												</button>
+											</div>
 
-									<div className='flex justify-center'>
-										<button
-											type='submit'
-											onClick={changeEmail}
-											disabled={!newValue || newValue === user?.email}
-											className='flex items-center justify-center w-40 gap-2 px-6 py-1 font-semibold tracking-wide text-white transition-all duration-300 rounded-md disabled:cursor-not-allowed disabled:scale-100 disabled:bg-blue-400 whitespace-nowrap hover:scale-105 hover:bg-blue-600 bg-light-blue'
-										>
-											{loading ? 'Please Wait' : 'Submit'}
+											{/* error message */}
+											<p
+												className={`${
+													isError ? 'block' : 'hidden'
+												} p-2 -my-6 font-bold  text-red-800 bg-red-300 flex items-center justify-center min-h-[40px] transition-all duration-300 rounded`}
+											>
+												{isError}
+											</p>
+										</form>
+									) : changeUserData === 'password' ? (
+										<form className='space-y-4'>
+											<h1 className='pl-1 text-xl font-medium'>
+												Change Password
+											</h1>
 
-											{loading && (
-												<img
-													src='/loading-spinner.svg'
-													className='h-6'
-													alt='uploading svg'
-												/>
-											)}
-										</button>
-									</div>
+											<input
+												type='password'
+												className='h-10 px-4 border-none rounded-lg outline-none w-80 focus:text-black dark:focus:text-white bg-[#EFEFEF] dark:bg-[#4E4F50]  text-zinc-400'
+												placeholder='Enter New Password'
+												value={newValue}
+												onChange={(e: any) => setNewValue(e.target.value)}
+											/>
 
-									{/* error message */}
-									<p
-										className={`${
-											isError ? 'block' : 'hidden'
-										} p-2 -my-6 font-bold  text-red-800 bg-red-300 flex items-center justify-center min-h-[40px] transition-all duration-300 rounded`}
-									>
-										{isError}
-									</p>
-								</form>
-							) : changeUserData === 'password' ? (
-								<form className='space-y-4'>
-									<h1 className='pl-1 text-xl font-medium'>Change Password</h1>
+											<div className='flex justify-center'>
+												<button
+													type='submit'
+													onClick={changePassword}
+													disabled={!newValue}
+													className='flex items-center justify-center w-40 gap-2 px-6 py-1 font-semibold tracking-wide text-white transition-all duration-300 rounded-md disabled:cursor-not-allowed disabled:scale-100 disabled:bg-blue-400 whitespace-nowrap hover:scale-105 hover:bg-blue-600 bg-light-blue'
+												>
+													Submit
+												</button>
+											</div>
 
-									<input
-										type='password'
-										className='h-10 px-4 border-none rounded-lg outline-none w-80 focus:text-black dark:focus:text-white bg-[#EFEFEF] dark:bg-[#4E4F50]  text-zinc-400'
-										placeholder='Enter New Password'
-										value={newValue}
-										onChange={(e: any) => setNewValue(e.target.value)}
-									/>
-
-									<div className='flex justify-center'>
-										<button
-											type='submit'
-											onClick={changePassword}
-											disabled={!newValue}
-											className='flex items-center justify-center w-40 gap-2 px-6 py-1 font-semibold tracking-wide text-white transition-all duration-300 rounded-md disabled:cursor-not-allowed disabled:scale-100 disabled:bg-blue-400 whitespace-nowrap hover:scale-105 hover:bg-blue-600 bg-light-blue'
-										>
-											{loading ? 'Please Wait' : 'Submit'}
-
-											{loading && (
-												<img
-													src='/loading-spinner.svg'
-													className='h-6'
-													alt='uploading svg'
-												/>
-											)}
-										</button>
-									</div>
-
-									{/* error message */}
-									<p
-										className={`${
-											isError ? 'block' : 'hidden'
-										} p-2 -my-6 font-bold  text-red-800 bg-red-300 flex items-center justify-center min-h-[40px] transition-all duration-300 rounded`}
-									>
-										{isError}
-									</p>
-								</form>
-							) : (
-								<div></div>
-							)}
-						</div>
-					</Box>
-				</Fade>
-			</Modal>
-		</div>
+											{/* error message */}
+											<p
+												className={`${
+													isError ? 'block' : 'hidden'
+												} p-2 -my-6 font-bold  text-red-800 bg-red-300 flex items-center justify-center min-h-[40px] transition-all duration-300 rounded`}
+											>
+												{isError}
+											</p>
+										</form>
+									) : (
+										<div></div>
+									)}
+								</div>
+							</Box>
+						</Fade>
+					</Modal>
+				</div>
+			)}
+		</>
 	);
 }
