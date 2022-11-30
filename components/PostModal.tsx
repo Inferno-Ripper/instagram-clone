@@ -12,6 +12,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import moment from 'moment';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Comment from './Comment';
 
 const style = {
 	position: 'absolute' as 'absolute',
@@ -193,39 +194,12 @@ export default function PostModal({
 									</div>
 
 									{comments?.map((comment: any) => (
-										<div key={comment.id}>
-											<div className='flex items-center justify-between px-2 py-2 break-words '>
-												<div className='flex items-center gap-2 '>
-													{comment.data().profilePicture ? (
-														<img
-															className='hidden w-10 h-10 mr-1 rounded-full sm:flex'
-															src={comment.data().profilePicture}
-														/>
-													) : (
-														<AccountCircleIcon className='hidden w-12 h-12 -ml-1 text-gray-500 sm:flex ' />
-													)}
-
-													<div className='flex gap-2 '>
-														<div>
-															<p className='font-bold whitespace-nowrap'>
-																{comment.data().userName}
-															</p>
-														</div>
-														<p className='pr-2 break-all'>
-															{comment.data().comment}
-														</p>
-													</div>
-												</div>
-
-												<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
-											</div>
-
-											<p className='px-2 -mt-2 text-xs whitespace-nowrap text-zinc-500'>
-												{moment(
-													comment?.data()?.timestamp?.toDate()
-												)?.fromNow()}
-											</p>
-										</div>
+										<Comment
+											key={comment.id}
+											comment={comment}
+											postId={postId}
+											isPostModal={isPostModal}
+										/>
 									))}
 								</div>
 

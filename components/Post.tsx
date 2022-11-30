@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PostSettings from './PostSettings';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import moment from 'moment';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import {
 	addDoc,
@@ -24,6 +24,7 @@ import { db } from '../firebase';
 import PostModal from './PostModal';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { useRecoilValue } from 'recoil';
+import Comment from './Comment';
 interface IPost {
 	uid: string;
 	postId: string;
@@ -103,7 +104,7 @@ const Post = ({
 	};
 
 	useEffect(() => {
-		// check if the has liked the post
+		// check if the user has liked the post
 		const isLikedPost = likes.filter((like: any) => like?.id === user?.uid);
 
 		// if the user has liked the post then set the like button to filled
@@ -228,19 +229,13 @@ const Post = ({
 					)}
 
 					{/* comments */}
-					{comments.slice(0, 2).map((comment: any) => (
-						<div
-							className='flex items-center justify-between px-2 py-1'
+					{comments?.slice(0, 2)?.map((comment: any) => (
+						<Comment
 							key={comment.id}
-						>
-							<div className='flex items-center gap-2'>
-								<p className='font-bold'>{comment.data().userName}</p>
-
-								<p>{comment.data().comment}</p>
-							</div>
-
-							<FavoriteBorderIcon className='text-[16px] cursor-pointer hover:text-zinc-500 transition-all duration-100' />
-						</div>
+							comment={comment}
+							postId={postId}
+							isPostModal={isPostModal}
+						/>
 					))}
 
 					<p className='p-2 text-sm text-zinc-500'>

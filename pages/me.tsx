@@ -22,7 +22,7 @@ import MiniPost from '../components/MiniPost';
 import UserSettingsDropDownMenu from '../components/UserSettingsDropDownMenu';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 
-const me: NextPage = () => {
+const Me: NextPage = () => {
 	const router = useRouter();
 	const [user, setUser] = useRecoilState<IUser | any>(userRecoil);
 	const [userPosts, setUserPosts] = useState<any>();
@@ -184,4 +184,4 @@ const me: NextPage = () => {
 	);
 };
 
-export default me;
+export default Me;

@@ -127,7 +127,6 @@ export default function ChangeUserDataModal({
 					})
 					.catch((error) => {
 						displayError(error.message);
-						console.log(error);
 					});
 			}
 		}

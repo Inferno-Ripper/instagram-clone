@@ -15,7 +15,7 @@ interface IUser {
 	avatar: string;
 }
 
-const suggestedUsers = () => {
+const SuggestedUsers = () => {
 	const [usersSuggestions, setUsersSuggestions] = useState<IUser[]>([]);
 	const user = useRecoilValue(userRecoil);
 	const router = useRouter();
@@ -127,4 +127,4 @@ const suggestedUsers = () => {
 	);
 };
 
-export default suggestedUsers;
+export default SuggestedUsers;
