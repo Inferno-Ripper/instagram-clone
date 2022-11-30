@@ -16,7 +16,7 @@ import { useRecoilValue } from 'recoil';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { db, ref, storage } from '../firebase';
 import { getDownloadURL, uploadBytes } from 'firebase/storage';
-import Lottie from 'react-lottie';
+import Lottie from 'react-lottie-player';
 import instagramLogoLoading from '../instagram-logo-loading.json';
 
 const style = {
@@ -106,18 +106,14 @@ export default function NewPostModal() {
 		setLoading(false);
 	};
 
-	const defaultOptions = {
-		loop: true,
-		autoplay: true,
-		animationData: instagramLogoLoading,
-		rendererSettings: {
-			preserveAspectRatio: 'xMidYMid slice',
-		},
-	};
-
 	return loading ? (
-		<div className='fixed inset-0 top-1/4'>
-			<Lottie height={350} width={350} options={defaultOptions} />
+		<div className='fixed top-1/2 left-1/2 transform -translate-x-[50%] -translate-y-[50%] '>
+			<Lottie
+				animationData={instagramLogoLoading}
+				style={{ width: 350, height: 350 }}
+				play
+				loop
+			/>
 		</div>
 	) : (
 		<>

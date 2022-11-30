@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Header from '../components/Header';
@@ -15,7 +14,7 @@ import {
 import { useRecoilState } from 'recoil';
 import { userRecoil } from '../atoms/userAtom';
 import { useRouter } from 'next/router';
-import Lottie from 'react-lottie';
+import Lottie from 'react-lottie-player';
 import instagramPhoneAnimation from '../instagram-phone-animation.json';
 
 const Signin = () => {
@@ -152,15 +151,6 @@ const Signin = () => {
 		}
 	};
 
-	const defaultOptions = {
-		loop: true,
-		autoplay: true,
-		animationData: instagramPhoneAnimation,
-		rendererSettings: {
-			preserveAspectRatio: 'xMidYMid slice',
-		},
-	};
-
 	return (
 		<>
 			<Head>
@@ -173,7 +163,12 @@ const Signin = () => {
 
 				<div className='flex items-center justify-center w-full h-full gap-20'>
 					<div className='hidden lg:block'>
-						<Lottie height={500} width={500} options={defaultOptions} />
+						<Lottie
+							style={{ width: 500, height: 500 }}
+							animationData={instagramPhoneAnimation}
+							play
+							loop
+						/>
 					</div>
 
 					<div className='flex flex-col items-center justify-center gap-4 '>
@@ -285,7 +280,7 @@ const Signin = () => {
 						>
 							{loginMethod === 'login' && (
 								<>
-									<p>Don't have an account?</p>
+									<p>Don`&apos;`t have an account?</p>
 									<p className='text-[#3A5897] font-bold cursor-pointer hover:text-[#3474ff] transition-all duration-300'>
 										Sign up
 									</p>
