@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import React, { FC } from 'react';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 interface IUser {
 	userName: string;

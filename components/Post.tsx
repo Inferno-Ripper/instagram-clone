@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PostSettings from './PostSettings';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
@@ -25,6 +24,7 @@ import PostModal from './PostModal';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { useRecoilValue } from 'recoil';
 import Comment from './Comment';
+import { MdAccountCircle } from 'react-icons/md';
 interface IPost {
 	uid: string;
 	postId: string;
@@ -161,7 +161,7 @@ const Post = ({
 								src={profilePicture}
 							/>
 						) : (
-							<AccountCircleIcon className='w-12 h-12 text-gray-500 ' />
+							<MdAccountCircle className='w-12 h-12 text-gray-500 ' />
 						)}
 						<p className='pt-2 font-medium tracking-wide justify-self-start'>
 							{userName}

@@ -5,7 +5,6 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import PostSettings from './PostSettings';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
@@ -13,17 +12,18 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import moment from 'moment';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Comment from './Comment';
+import { MdAccountCircle } from 'react-icons/md';
 
 const style = {
 	position: 'absolute' as 'absolute',
 	top: '50%',
 	left: '50%',
 	transform: 'translate(-50%, -50%)',
-	width: 400,
+	// width: 400,
 	bgcolor: 'background.paper',
-	border: '2px solid #000',
+	// border: '2px solid #000',
 	boxShadow: 24,
-	p: 4,
+	// p: 4,
 };
 
 export default function PostModal({
@@ -82,7 +82,7 @@ export default function PostModal({
 										src={profilePicture}
 									/>
 								) : (
-									<AccountCircleIcon className='w-12 h-12 text-gray-500 ' />
+									<MdAccountCircle className='w-12 h-12 text-gray-500 ' />
 								)}
 								<p className='pt-2 font-medium tracking-wide justify-self-start'>
 									{userName}
@@ -158,7 +158,7 @@ export default function PostModal({
 											src={profilePicture}
 										/>
 									) : (
-										<AccountCircleIcon className='w-12 h-12 -ml-1 text-gray-500 ' />
+										<MdAccountCircle className='w-12 h-12 -ml-1 text-gray-500 ' />
 									)}
 									<p className='pt-2 font-medium tracking-wide justify-self-start'>
 										{userName}
@@ -182,7 +182,7 @@ export default function PostModal({
 												src={profilePicture}
 											/>
 										) : (
-											<AccountCircleIcon className='hidden w-12 h-12 -ml-1 text-gray-500 md:flex ' />
+											<MdAccountCircle className='hidden w-12 h-12 -ml-1 text-gray-500 md:flex ' />
 										)}
 										<p className='font-bold tracking-wide justify-self-start'>
 											{userName}

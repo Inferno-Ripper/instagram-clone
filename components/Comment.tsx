@@ -13,7 +13,7 @@ import {
 import { db } from '../firebase';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { useRecoilValue } from 'recoil';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { MdAccountCircle } from 'react-icons/md';
 import moment from 'moment';
 
 const Comment = ({ comment, postId, isPostModal }: any) => {
@@ -68,7 +68,7 @@ const Comment = ({ comment, postId, isPostModal }: any) => {
 								src={comment.data().profilePicture}
 							/>
 						) : (
-							<AccountCircleIcon className='hidden w-12 h-12 -ml-1 text-gray-500 sm:flex ' />
+							<MdAccountCircle className='hidden w-12 h-12 -ml-1 text-gray-500 sm:flex ' />
 						))}
 
 					<p className='font-bold'>{comment.data().userName}</p>
