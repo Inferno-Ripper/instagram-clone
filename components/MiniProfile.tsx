@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { auth } from '../firebase';
 import Link from 'next/link';
+import { MdAccountCircle } from 'react-icons/md';
 
 const MiniProfile = (): any => {
 	const [user, setUser] = useRecoilState<IUser | any>(userRecoil);
@@ -24,7 +25,7 @@ const MiniProfile = (): any => {
 						className='rounded-full w-[50px] h-[50px]'
 					/>
 				) : (
-					<AccountCircle className='text-gray-500 rounded-full cursor-pointer w-14 h-14' />
+					<MdAccountCircle className='text-gray-500 rounded-full cursor-pointer w-[56px] h-[56px]' />
 				)}
 
 				<Link href='/me'>

@@ -21,6 +21,7 @@ import {
 import MiniPost from '../components/MiniPost';
 import UserSettingsDropDownMenu from '../components/UserSettingsDropDownMenu';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import { MdAccountCircle } from 'react-icons/md';
 
 const Me: NextPage = () => {
 	const router = useRouter();
@@ -74,7 +75,7 @@ const Me: NextPage = () => {
 									src={user?.photo}
 								/>
 							) : (
-								<AccountCircleIcon className='w-24 h-24 text-gray-500 xl:ml-20 md:w-48 md:h-48 ' />
+								<MdAccountCircle className='w-[96px] flex-shrink-0 h-[96px] text-gray-500 xl:ml-20 md:w-[192px] md:h-[192px] ' />
 							)}
 
 							<div className='md:space-y-6 min-w-[200px] w-auto'>
