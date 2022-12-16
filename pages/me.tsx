@@ -8,7 +8,6 @@ import { IUser, userRecoil } from '../atoms/userAtom';
 import Header from '../components/Header';
 import { auth, db } from '../firebase';
 import AppsIcon from '@mui/icons-material/Apps';
-import OndemandVideoOutlinedIcon from '@mui/icons-material/OndemandVideoOutlined';
 import AccountBoxOutlinedIcon from '@mui/icons-material/AccountBoxOutlined';
 import {
 	collection,

@@ -5,12 +5,11 @@ import {
 	collection,
 	deleteDoc,
 	doc,
-	getDocs,
 	onSnapshot,
 	query,
 	setDoc,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { auth, db } from '../firebase';
 import { IUser, userRecoil } from '../atoms/userAtom';
 import { useRecoilValue } from 'recoil';
 import { MdAccountCircle } from 'react-icons/md';
@@ -49,11 +48,11 @@ const Comment = ({ comment, postId, isPostModal }: any) => {
 				setCommentLikes(snapshot.docs);
 			}
 		);
-	}, []);
+	}, [isCommentLiked]);
 
 	useEffect(() => {
 		commentLikes?.filter((doc: any) =>
-			doc.id === user.uid ? setIsCommentLiked(true) : setIsCommentLiked(false)
+			doc?.id === user?.uid ? setIsCommentLiked(true) : setIsCommentLiked(false)
 		);
 	}, [commentLikes]);
 
@@ -82,7 +81,7 @@ const Comment = ({ comment, postId, isPostModal }: any) => {
 					</p>
 
 					<p className='pr-2 text-xs cursor-pointer whitespace-nowrap text-zinc-500 hover:text-white'>
-						Likes {commentLikes.length}
+						Likes {commentLikes?.length}
 					</p>
 				</div>
 			</div>
