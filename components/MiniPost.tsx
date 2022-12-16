@@ -151,6 +151,7 @@ const MiniPost = ({
 				likePost={likePost}
 				isLiked={isLiked}
 				postId={postId}
+				uid={user.uid}
 			/>
 		</div>
 	);
